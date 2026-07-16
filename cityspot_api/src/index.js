@@ -1,20 +1,23 @@
-const express = require("express");
-const cors = require("cors");
-require("dotenv").config();
+const app = require("./server/bootstrap/app");
+const env = require("./shared/config/env");
+const sequelize = require("./shared/database/postgresql/sequelize");
+const { connectMongoDB } = require("./shared/database/mongodb/mongoose");
 
-const app = express();
+async function startServer() {
+  try {
+    await sequelize.authenticate();
+    console.log("Conexion a PostgreSQL establecida correctamente");
 
-app.use(cors());
-app.use(express.json());
+    await connectMongoDB();
+    console.log("Conexion a MongoDB establecida correctamente");
 
-app.get("/", (req, res) => {
-  res.status(200).json({
-    mensaje: "API de CitySpot funcionando correctamente"
-  });
-});
+    app.listen(env.port, () => {
+      console.log(`Servidor ejecutandose en http://localhost:${env.port}`);
+    });
+  } catch (error) {
+    console.error("No se pudo iniciar CitySpot API:", error.message);
+    process.exit(1);
+  }
+}
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
-});
+startServer();
