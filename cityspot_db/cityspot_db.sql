@@ -165,6 +165,9 @@ CREATE INDEX IF NOT EXISTS idx_actividades_ciudad
 CREATE INDEX IF NOT EXISTS idx_actividades_estado
     ON actividades(estado);
 
+CREATE UNIQUE INDEX IF NOT EXISTS uq_categorias_nombre_lower
+    ON categorias (LOWER(nombre));
+
 CREATE INDEX IF NOT EXISTS idx_imagenes_actividad
     ON imagenes_actividad(id_actividad);
 
@@ -174,3 +177,33 @@ CREATE UNIQUE INDEX IF NOT EXISTS uq_imagen_principal_por_actividad
 
 CREATE INDEX IF NOT EXISTS idx_favoritos_actividad
     ON favoritos(id_actividad);
+
+
+
+---AÑADIR ADMIN
+INSERT INTO usuarios (
+  nombre,
+  correo,
+  contrasena,
+  tipo_usuario,
+  telefono,
+  estado
+) VALUES (
+  'Admin CitySpot',
+  'admin.tourism_ecuador@cityspot.com',
+  '$2b$10$IF8128pXMy9dRmLUMjkVMel6P8ip3NB2U60D4b6Un3wHaXlZUkI2m',
+  'ADMINISTRADOR',
+  '0981716781',
+  'ACTIVO'
+);
+
+--INSERTAR CATEGORIAS
+INSERT INTO categorias (nombre, descripcion)
+VALUES
+  ('Aventura', 'Actividades al aire libre, deportes extremos y experiencias de adrenalina.'),
+  ('Gastronomia', 'Restaurantes, comida local, cafeterias y experiencias culinarias.'),
+  ('Cultura', 'Museos, historia, arte, patrimonio y eventos culturales.'),
+  ('Naturaleza', 'Parques, reservas, senderos, cascadas y espacios naturales.'),
+  ('Relax', 'Spas, termas, descanso y bienestar.'),
+  ('Entretenimiento', 'Eventos, bares, conciertos, shows y actividades recreativas.')
+ON CONFLICT (nombre) DO NOTHING;
