@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+const apiRoutes = require("../routes");
+const errorHandler = require("../../shared/middlewares/errorHandler");
 
 const app = express();
 
@@ -8,15 +10,18 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.status(200).json({
-    mensaje: "API de CitySpot funcionando correctamente"
+    message: "CitySpot API is running correctly"
   });
 });
 
 app.get("/health", (req, res) => {
   res.status(200).json({
     status: "ok",
-    servicio: "cityspot_api"
+    service: "cityspot_api"
   });
 });
+
+app.use("/api", apiRoutes);
+app.use(errorHandler);
 
 module.exports = app;

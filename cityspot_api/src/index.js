@@ -6,16 +6,16 @@ const { connectMongoDB } = require("./shared/database/mongodb/mongoose");
 async function startServer() {
   try {
     await sequelize.authenticate();
-    console.log("Conexion a PostgreSQL establecida correctamente");
+    console.log("PostgreSQL connection established successfully");
 
     await connectMongoDB();
-    console.log("Conexion a MongoDB establecida correctamente");
+    console.log("MongoDB connection established successfully");
 
     app.listen(env.port, () => {
-      console.log(`Servidor ejecutandose en http://localhost:${env.port}`);
+      console.log(`Server running at http://localhost:${env.port}`);
     });
   } catch (error) {
-    console.error("No se pudo iniciar CitySpot API:", error.message);
+    console.error("CitySpot API could not start:", error.message);
     process.exit(1);
   }
 }
