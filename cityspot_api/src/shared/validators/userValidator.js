@@ -4,7 +4,7 @@ const AppError = require("../errors/AppError");
 const PUBLIC_REGISTRATION_ROLES = ["USUARIO", "PROPIETARIO"];
 const NAME_REGEX = /^[\p{L}\s]+$/u;
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*\s).{8,72}$/;
-const PHONE_REGEX = /^[0-9]{7,15}$/;
+const PHONE_REGEX = /^\+?[0-9]{7,15}$/;
 
 function normalizeName(name) {
   if (!name || !String(name).trim()) {
@@ -67,7 +67,7 @@ function normalizePhone(phone) {
   const normalizedPhone = String(phone).trim();
 
   if (!PHONE_REGEX.test(normalizedPhone)) {
-    throw new AppError("Phone must contain 7 to 15 digits", 400);
+    throw new AppError("Phone must contain 7 to 15 digits and may start with +", 400);
   }
 
   return normalizedPhone;

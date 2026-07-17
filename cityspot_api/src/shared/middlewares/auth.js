@@ -29,7 +29,12 @@ async function authenticate(req, res, next) {
 
     next();
   } catch (error) {
-    next(error instanceof AppError ? error : new AppError("Invalid or expired token", 401));
+    if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
+      next(new AppError("Invalid or expired token", 401));
+      return;
+    }
+
+    next(error);
   }
 }
 

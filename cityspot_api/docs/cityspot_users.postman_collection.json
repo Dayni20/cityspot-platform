@@ -140,7 +140,7 @@
         {
           "name": "Update Profile",
           "request": {
-            "method": "PUT",
+            "method": "PATCH",
             "header": [
               {
                 "key": "Content-Type",
@@ -153,7 +153,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Test User Updated\",\n  \"phone\": \"0987654321\"\n}"
+              "raw": "{\n  \"name\": \"Test User Updated\",\n  \"phone\": \"+593987654321\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/users/profile",
