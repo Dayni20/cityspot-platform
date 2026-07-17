@@ -9,6 +9,7 @@ const onlyAdmin = [authenticate, authorizeRoles("ADMINISTRADOR")];
 const ownerOrAdmin = [authenticate, authorizeRoles("PROPIETARIO", "ADMINISTRADOR")];
 
 router.get("/", asyncHandler(activityController.list));
+router.get("/admin", onlyAdmin, asyncHandler(activityController.listAdmin));
 router.get("/mine", onlyOwner, asyncHandler(activityController.listMine));
 router.get("/:id", asyncHandler(activityController.getById));
 router.post("/", onlyOwner, asyncHandler(activityController.create));

@@ -16,6 +16,46 @@ Base URL local:
 http://localhost:3000/api
 ```
 
+## Frontend admin
+
+El frontend esta en:
+
+```txt
+cityspot_web/
+```
+
+Levantarlo:
+
+```bash
+cd cityspot_web
+npm install
+npm run dev
+```
+
+URL local:
+
+```txt
+http://localhost:5173
+```
+
+El panel administrador usa menu lateral y esta en:
+
+```txt
+/admin
+```
+
+El login esta en:
+
+```txt
+/login
+```
+
+Para conectar con la API, crear `cityspot_web/.env` usando como base `.env.example`:
+
+```env
+VITE_API_BASE_URL=http://localhost:3000/api
+```
+
 Health check:
 
 ```txt

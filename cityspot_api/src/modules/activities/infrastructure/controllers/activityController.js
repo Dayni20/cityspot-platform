@@ -5,6 +5,7 @@ const ActivitySequelizeRepository = require("../persistence/sequelize/activitySe
 const CategorySequelizeRepository = require("../../../categories/infrastructure/persistence/sequelize/categorySequelizeRepository");
 const CreateActivityUseCase = require("../../application/use-cases/createActivity");
 const ListActivitiesUseCase = require("../../application/use-cases/listActivities");
+const ListAdminActivitiesUseCase = require("../../application/use-cases/listAdminActivities");
 const GetActivityUseCase = require("../../application/use-cases/getActivity");
 const ListOwnerActivitiesUseCase = require("../../application/use-cases/listOwnerActivities");
 const UpdateActivityUseCase = require("../../application/use-cases/updateActivity");
@@ -15,6 +16,7 @@ const activityRepository = new ActivitySequelizeRepository();
 const categoryRepository = new CategorySequelizeRepository();
 const createActivity = new CreateActivityUseCase(activityRepository, categoryRepository);
 const listActivities = new ListActivitiesUseCase(activityRepository);
+const listAdminActivities = new ListAdminActivitiesUseCase(activityRepository);
 const getActivity = new GetActivityUseCase(activityRepository);
 const listOwnerActivities = new ListOwnerActivitiesUseCase(activityRepository);
 const updateActivity = new UpdateActivityUseCase(activityRepository, categoryRepository);
@@ -34,6 +36,12 @@ class ActivityController {
 
   async list(req, res) {
     const activities = await listActivities.execute(req.query);
+
+    res.status(200).json({ activities });
+  }
+
+  async listAdmin(req, res) {
+    const activities = await listAdminActivities.execute();
 
     res.status(200).json({ activities });
   }
