@@ -1,87 +1,12 @@
 {
   "info": {
-    "_postman_id": "7c3b0c9e-2d44-47d5-9d5f-cityspot-api",
-    "name": "cityspot_api",
+    "_postman_id": "86785e4a-0d8f-4b3f-853c-b401c2fff728",
+    "name": "cityspot_api_platform",
     "description": "General Postman collection for the CitySpot API. This collection will grow as new backend modules are added.",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48819282",
+    "_collection_link": "https://go.postman.co/collection/48819282-86785e4a-0d8f-4b3f-853c-b401c2fff728?source=collection_link"
   },
-  "variable": [
-    {
-      "key": "rootUrl",
-      "value": "http://localhost:3000",
-      "type": "string"
-    },
-    {
-      "key": "baseUrl",
-      "value": "http://localhost:3000/api",
-      "type": "string"
-    },
-    {
-      "key": "userEmail",
-      "value": "cityspot.user@example.com",
-      "type": "string"
-    },
-    {
-      "key": "userPassword",
-      "value": "Password123",
-      "type": "string"
-    },
-    {
-      "key": "userToken",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "adminEmail",
-      "value": "admin.cityspot@example.com",
-      "type": "string"
-    },
-    {
-      "key": "adminPassword",
-      "value": "Admin12345",
-      "type": "string"
-    },
-    {
-      "key": "adminToken",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "categoryId",
-      "value": "1",
-      "type": "string"
-    },
-    {
-      "key": "categoryName",
-      "value": "Aventura",
-      "type": "string"
-    },
-    {
-      "key": "categoryDescription",
-      "value": "Actividades turisticas de aventura y experiencias al aire libre.",
-      "type": "string"
-    },
-    {
-      "key": "ownerEmail",
-      "value": "cityspot.owner@example.com",
-      "type": "string"
-    },
-    {
-      "key": "ownerPassword",
-      "value": "Password123",
-      "type": "string"
-    },
-    {
-      "key": "ownerToken",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "activityId",
-      "value": "1",
-      "type": "string"
-    }
-  ],
   "item": [
     {
       "name": "Setup",
@@ -100,7 +25,8 @@
                 "health"
               ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -119,7 +45,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"{{userEmail}}\",\n  \"password\": \"{{userPassword}}\",\n  \"role\": \"USUARIO\",\n  \"phone\": \"+593987654321\"\n}"
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"{{userEmail}}\",\n  \"password\": \"{{userPassword}}\",\n  \"role\": \"USUARIO\",\n  \"phone\": \"+593981716781\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/users/register",
@@ -131,7 +57,8 @@
                 "register"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Login User",
@@ -157,7 +84,8 @@
                 "login"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Profile",
@@ -179,7 +107,8 @@
                 "profile"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Update Profile",
@@ -197,7 +126,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Test User Updated\",\n  \"phone\": \"+593987654322\"\n}"
+              "raw": "{\n  \"name\": \"geovanna User Updated\",\n  \"phone\": \"+593987654322\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/users/profile",
@@ -209,7 +138,8 @@
                 "profile"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Deactivate Profile",
@@ -231,29 +161,8 @@
                 "profile"
               ]
             }
-          }
-        },
-        {
-          "name": "Get Profile After Deactivation - Should Return 403",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{userToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/users/profile",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "users",
-                "profile"
-              ]
-            }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -284,7 +193,8 @@
                 "login"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "List Categories",
@@ -300,7 +210,8 @@
                 "categories"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Category By Id",
@@ -317,7 +228,8 @@
                 "{{categoryId}}"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Create Category",
@@ -346,7 +258,8 @@
                 "categories"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Update Category",
@@ -364,7 +277,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"description\": \"Categoria actualizada desde Postman.\"\n}"
+              "raw": "{\n  \"name\": \"Probar a ver\",\n  \"description\": \"Categoria actualizada desde Postman.\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/categories/{{categoryId}}",
@@ -376,7 +289,8 @@
                 "{{categoryId}}"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Delete Category",
@@ -398,7 +312,8 @@
                 "{{categoryId}}"
               ]
             }
-          }
+          },
+          "response": []
         }
       ]
     },
@@ -429,7 +344,8 @@
                 "register"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Owner Login",
@@ -455,7 +371,8 @@
                 "login"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "List Public Activities",
@@ -471,7 +388,8 @@
                 "activities"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "List Public Activities By City",
@@ -493,7 +411,8 @@
                 }
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "List Public Activities By Category",
@@ -515,7 +434,8 @@
                 }
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Get Public Activity By Id",
@@ -532,7 +452,8 @@
                 "{{activityId}}"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Create Activity",
@@ -561,7 +482,8 @@
                 "activities"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "My Activities",
@@ -583,7 +505,8 @@
                 "mine"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Update Activity",
@@ -613,7 +536,8 @@
                 "{{activityId}}"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Admin Update Activity Status",
@@ -644,7 +568,8 @@
                 "status"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Deactivate Activity",
@@ -666,7 +591,127 @@
                 "{{activityId}}"
               ]
             }
-          }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "item": [
+        {
+          "name": "List Activity Images",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/activities/{{activityId}}/images",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "activities",
+                "{{activityId}}",
+                "images"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Activity Image",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "/C:/Users/Usuario/Downloads/prueba.png"
+                },
+                {
+                  "key": "description",
+                  "value": "Imagen principal de la actividad",
+                  "type": "text"
+                },
+                {
+                  "key": "isMain",
+                  "value": "true",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/activities/{{activityId}}/images",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "activities",
+                "{{activityId}}",
+                "images"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Set Main Activity Image",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/activities/{{activityId}}/images/{{imageId}}/main",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "activities",
+                "{{activityId}}",
+                "images",
+                "{{imageId}}",
+                "main"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Activity Image",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/activities/{{activityId}}/images/{{imageId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "activities",
+                "{{activityId}}",
+                "images",
+                "{{imageId}}"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -697,7 +742,8 @@
                 "register"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Register - Admin Not Allowed Publicly",
@@ -723,7 +769,8 @@
                 "register"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Create Category Without Token - Should Return 401",
@@ -748,7 +795,8 @@
                 "categories"
               ]
             }
-          }
+          },
+          "response": []
         },
         {
           "name": "Create Category Invalid Name - Should Return 400",
@@ -777,9 +825,92 @@
                 "categories"
               ]
             }
-          }
+          },
+          "response": []
         }
       ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "rootUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api"
+    },
+    {
+      "key": "userEmail",
+      "value": "cityspot.user@example.com"
+    },
+    {
+      "key": "userPassword",
+      "value": "Password123"
+    },
+    {
+      "key": "userToken",
+      "value": ""
+    },
+    {
+      "key": "adminEmail",
+      "value": "admin.tourism_ecuador@cityspot.com"
+    },
+    {
+      "key": "adminPassword",
+      "value": "@round_Ecuador*0101"
+    },
+    {
+      "key": "adminToken",
+      "value": ""
+    },
+    {
+      "key": "categoryId",
+      "value": "1"
+    },
+    {
+      "key": "categoryName",
+      "value": "Aventura"
+    },
+    {
+      "key": "categoryDescription",
+      "value": "Actividades turisticas de aventura y experiencias al aire libre."
+    },
+    {
+      "key": "ownerEmail",
+      "value": ""
+    },
+    {
+      "key": "ownerPassword",
+      "value": ""
+    },
+    {
+      "key": "ownerToken",
+      "value": ""
     }
   ]
 }

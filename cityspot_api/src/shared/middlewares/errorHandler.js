@@ -13,6 +13,13 @@ function errorHandler(error, req, res, next) {
     return;
   }
 
+  if (error.name === "MulterError") {
+    res.status(400).json({
+      message: error.message
+    });
+    return;
+  }
+
   const statusCode = error.statusCode || 500;
 
   res.status(statusCode).json({

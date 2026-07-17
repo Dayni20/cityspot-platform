@@ -38,6 +38,14 @@ npm install
 
 3. Verificar que exista `cityspot_api/.env` con las conexiones a PostgreSQL, MongoDB y JWT.
 
+Para subir imagenes tambien debe tener:
+
+```txt
+SUPABASE_URL
+SUPABASE_SERVICE_ROLE_KEY
+SUPABASE_BUCKET=activity-images
+```
+
 4. Levantar PostgreSQL y MongoDB.
 
 5. Ejecutar el script SQL:
@@ -151,6 +159,34 @@ Uso recomendado en frontend:
 - `PATCH /api/activities/:id/status`: solo administradores.
 - `DELETE /api/activities/:id`: desactiva la actividad.
 
+### Images
+
+Maneja imagenes de actividades. El archivo real se sube a Supabase Storage y en PostgreSQL se guarda la URL.
+
+Endpoints:
+
+```txt
+GET    /api/activities/:activityId/images
+POST   /api/activities/:activityId/images
+PATCH  /api/activities/:activityId/images/:imageId/main
+DELETE /api/activities/:activityId/images/:imageId
+```
+
+Uso recomendado en frontend:
+
+- `GET`: listar imagenes de una actividad.
+- `POST`: subir imagen con `multipart/form-data`, campo `image`.
+- `PATCH /main`: marcar una imagen como principal.
+- `DELETE`: eliminar imagen de Supabase y PostgreSQL.
+
+Campos para subir imagen:
+
+```txt
+image       -> archivo jpg, png o webp
+description -> texto opcional
+isMain      -> true o false
+```
+
 ## Respuestas y errores comunes
 
 ```txt
@@ -172,6 +208,7 @@ Por ahora el frontend puede trabajar con:
 Users      -> autenticacion y perfil
 Categories -> listado de categorias para formularios/filtros
 Activities -> actividades turisticas creadas por propietarios
+Images     -> imagenes de actividades guardadas en Supabase Storage
 ```
 
-Los modulos de imagenes, favoritos, historial y recomendaciones se agregaran despues.
+Los modulos de favoritos, historial y recomendaciones se agregaran despues.
