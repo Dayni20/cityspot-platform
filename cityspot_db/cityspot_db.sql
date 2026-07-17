@@ -180,7 +180,7 @@ CREATE INDEX IF NOT EXISTS idx_favoritos_actividad
 
 
 
----AÑADIR ADMIN
+---AÑADIR ADMINISTRADOR MANUAL
 INSERT INTO usuarios (
   nombre,
   correo,
@@ -197,7 +197,7 @@ INSERT INTO usuarios (
   'ACTIVO'
 );
 
---INSERTAR CATEGORIAS
+--INSERTAR CATEGORIAS 
 INSERT INTO categorias (nombre, descripcion)
 VALUES
   ('Aventura', 'Actividades al aire libre, deportes extremos y experiencias de adrenalina.'),

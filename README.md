@@ -124,6 +124,33 @@ Uso recomendado en frontend:
 - `GET /api/categories/:id`: ver detalle de una categoria.
 - `POST`, `PATCH`, `DELETE`: solo administradores.
 
+### Activities
+
+Maneja actividades turisticas creadas por propietarios.
+
+Endpoints:
+
+```txt
+GET    /api/activities
+GET    /api/activities?city=Quito
+GET    /api/activities?categoryId=1
+GET    /api/activities/:id
+GET    /api/activities/mine
+POST   /api/activities
+PATCH  /api/activities/:id
+PATCH  /api/activities/:id/status
+DELETE /api/activities/:id
+```
+
+Uso recomendado en frontend:
+
+- `GET /api/activities`: mostrar actividades publicas activas.
+- `GET /api/activities/mine`: mostrar actividades del propietario autenticado.
+- `POST /api/activities`: solo propietarios.
+- `PATCH /api/activities/:id`: solo el propietario de la actividad.
+- `PATCH /api/activities/:id/status`: solo administradores.
+- `DELETE /api/activities/:id`: desactiva la actividad.
+
 ## Respuestas y errores comunes
 
 ```txt
@@ -144,6 +171,7 @@ Por ahora el frontend puede trabajar con:
 ```txt
 Users      -> autenticacion y perfil
 Categories -> listado de categorias para formularios/filtros
+Activities -> actividades turisticas creadas por propietarios
 ```
 
-Los modulos de actividades, imagenes, favoritos, historial y recomendaciones se agregaran despues.
+Los modulos de imagenes, favoritos, historial y recomendaciones se agregaran despues.
