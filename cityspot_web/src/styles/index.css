@@ -17,3 +17,12 @@ textarea,
 select {
   font: inherit;
 }
+
+@layer components {
+  .field {
+    @apply w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100;
+  }
+}
+
+* { box-sizing: border-box; }
+a { text-decoration: none; }

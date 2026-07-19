@@ -1,0 +1,9 @@
+import { Heart, MapPin, Clock, DollarSign } from "lucide-react";
+import { Link } from "react-router-dom";
+function ActivityCard({ activity, favorite = false, onFavorite }) {
+  return <article className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+    <div className="relative h-52 overflow-hidden"><img src={activity.image} alt={activity.name} className="h-full w-full object-cover transition duration-500 group-hover:scale-105"/><button onClick={() => onFavorite?.(activity)} className="absolute right-3 top-3 rounded-full bg-white/95 p-2 shadow" aria-label="Favorito"><Heart size={19} className={favorite ? "fill-rose-500 text-rose-500" : "text-slate-600"}/></button><span className="absolute bottom-3 left-3 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-brand-700">{activity.category}</span></div>
+    <div className="p-5"><div className="flex items-center gap-1 text-sm text-slate-500"><MapPin size={15}/>{activity.city}</div><h3 className="mt-2 text-lg font-bold text-slate-950">{activity.name}</h3><p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">{activity.description}</p><div className="mt-4 flex flex-wrap gap-3 text-xs text-slate-500"><span className="flex items-center gap-1"><DollarSign size={14}/>${activity.referencePrice}</span><span className="flex items-center gap-1"><Clock size={14}/>{activity.schedule.split(" ").slice(0,3).join(" ")}</span></div><Link to={`/activities/${activity.id}`} className="mt-5 inline-flex w-full justify-center rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700">Ver detalle</Link></div>
+  </article>;
+}
+export default ActivityCard;
