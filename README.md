@@ -111,7 +111,7 @@ GET http://localhost:3000/health
 La coleccion esta en:
 
 ```txt
-cityspot_api/docs/cityspot_api.postman_collection.json
+cityspot_api/docs/cityspot_api_platform.postman_collection.json
 ```
 
 Importarla en Postman y revisar las variables de la coleccion:
@@ -227,6 +227,30 @@ description -> texto opcional
 isMain      -> true o false
 ```
 
+### Favorites
+
+Maneja las actividades guardadas por usuarios turistas.
+
+Endpoints:
+
+```txt
+GET    /api/favorites
+POST   /api/favorites/:activityId
+DELETE /api/favorites/:activityId
+```
+
+Uso recomendado en frontend:
+
+- `GET`: listar favoritos del usuario autenticado.
+- `POST`: guardar una actividad activa como favorita.
+- `DELETE`: quitar una actividad de favoritos.
+
+Reglas:
+
+- Solo el rol `USUARIO` puede guardar favoritos.
+- No se puede guardar dos veces la misma actividad.
+- Solo se pueden guardar actividades con estado `ACTIVA`.
+
 ## Respuestas y errores comunes
 
 ```txt
@@ -249,6 +273,7 @@ Users      -> autenticacion y perfil
 Categories -> listado de categorias para formularios/filtros
 Activities -> actividades turisticas creadas por propietarios
 Images     -> imagenes de actividades guardadas en Supabase Storage
+Favorites  -> actividades guardadas por usuarios
 ```
 
-Los modulos de favoritos, historial y recomendaciones se agregaran despues.
+Los modulos de historial y recomendaciones se agregaran despues.

@@ -716,6 +716,98 @@
       ]
     },
     {
+      "name": "Favorites",
+      "item": [
+        {
+          "name": "List My Favorites",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/favorites",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "favorites"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Activity To Favorites",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/favorites/{{favoriteActivityId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "favorites",
+                "{{favoriteActivityId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Remove Activity From Favorites",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/favorites/{{favoriteActivityId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "favorites",
+                "{{favoriteActivityId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Favorite Without User Role - Should Return 403",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/favorites/{{favoriteActivityId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "favorites",
+                "{{favoriteActivityId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "Validation Examples",
       "item": [
         {
@@ -911,6 +1003,11 @@
     {
       "key": "ownerToken",
       "value": ""
+    },
+    {
+      "key": "favoriteActivityId",
+      "value": "1",
+      "type": "string"
     }
   ]
 }
