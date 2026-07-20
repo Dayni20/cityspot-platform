@@ -808,6 +808,133 @@
       ]
     },
     {
+      "name": "Search History",
+      "item": [
+        {
+          "name": "Save Search History",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"city\": \"Quito\",\n  \"company\": \"Amigos\",\n  \"budget\": 50,\n  \"activityType\": \"Aventura\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/search-history",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search-history"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List My Search History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/search-history",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search-history"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Search History Item",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/search-history/{{searchHistoryId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search-history",
+                "{{searchHistoryId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Clear My Search History",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/search-history",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search-history"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Save Search History Without User Role - Should Return 403",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"city\": \"Quito\",\n  \"budget\": 30\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/search-history",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search-history"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "Validation Examples",
       "item": [
         {
@@ -1007,6 +1134,11 @@
     {
       "key": "favoriteActivityId",
       "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "searchHistoryId",
+      "value": "",
       "type": "string"
     }
   ]

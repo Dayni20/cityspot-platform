@@ -251,6 +251,41 @@ Reglas:
 - No se puede guardar dos veces la misma actividad.
 - Solo se pueden guardar actividades con estado `ACTIVA`.
 
+### Search History
+
+Maneja el historial de busquedas del usuario turista. Este modulo usa MongoDB.
+
+Endpoints:
+
+```txt
+GET    /api/search-history
+POST   /api/search-history
+DELETE /api/search-history
+DELETE /api/search-history/:id
+```
+
+Uso recomendado en frontend:
+
+- `POST`: guardar una busqueda realizada por el usuario.
+- `GET`: mostrar las ultimas busquedas del usuario.
+- `DELETE /:id`: borrar una busqueda especifica.
+- `DELETE /`: limpiar todo el historial del usuario.
+
+Campos principales:
+
+```txt
+city
+company
+budget
+activityType
+```
+
+Reglas:
+
+- Solo el rol `USUARIO` puede guardar historial.
+- El usuario solo ve y elimina su propio historial.
+- Se exige al menos un criterio de busqueda.
+
 ## Respuestas y errores comunes
 
 ```txt
@@ -274,6 +309,7 @@ Categories -> listado de categorias para formularios/filtros
 Activities -> actividades turisticas creadas por propietarios
 Images     -> imagenes de actividades guardadas en Supabase Storage
 Favorites  -> actividades guardadas por usuarios
+Search History -> historial de busquedas guardado en MongoDB
 ```
 
-Los modulos de historial y recomendaciones se agregaran despues.
+El modulo de recomendaciones se agregara despues.
