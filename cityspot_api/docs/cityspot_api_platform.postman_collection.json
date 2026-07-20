@@ -1125,11 +1125,11 @@
     },
     {
       "key": "userEmail",
-      "value": "cityspot.user@example.com"
+      "value": "cityspot.user@gmail.com"
     },
     {
       "key": "userPassword",
-      "value": "Password123"
+      "value": "1024_Dayana"
     },
     {
       "key": "userToken",
@@ -1149,23 +1149,23 @@
     },
     {
       "key": "categoryId",
-      "value": "1"
+      "value": "7"
     },
     {
       "key": "categoryName",
-      "value": "Aventura"
+      "value": "Prueba"
     },
     {
       "key": "categoryDescription",
-      "value": "Actividades turisticas de aventura y experiencias al aire libre."
+      "value": "Actividades prueba actual"
     },
     {
       "key": "ownerEmail",
-      "value": ""
+      "value": "cityspot.owner@gmail.com"
     },
     {
       "key": "ownerPassword",
-      "value": ""
+      "value": "1024_Owner"
     },
     {
       "key": "ownerToken",
