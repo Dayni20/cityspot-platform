@@ -1,6 +1,12 @@
 # cityspot-platform
 
-Plataforma web para descubrir actividades y lugares turisticos en Ecuador.
+Desarrollamos CitySpot como una plataforma web para descubrir actividades y lugares turisticos en Ecuador.
+
+Autoras:
+
+```txt
+Dayana Castillo y Geovanna Velasco
+```
 
 ## API backend
 
@@ -76,7 +82,13 @@ cd cityspot_api
 npm install
 ```
 
-3. Verificar que exista `cityspot_api/.env` con las conexiones a PostgreSQL, MongoDB y JWT.
+3. Crear `cityspot_api/.env` usando como base:
+
+```txt
+cityspot_api/.env.example
+```
+
+En ese archivo configuramos las conexiones a PostgreSQL, MongoDB y JWT.
 
 Para subir imagenes tambien debe tener:
 
@@ -84,6 +96,13 @@ Para subir imagenes tambien debe tener:
 SUPABASE_URL
 SUPABASE_SERVICE_ROLE_KEY
 SUPABASE_BUCKET=activity-images
+```
+
+Para recomendaciones con IA tambien debe tener:
+
+```txt
+OPENAI_API_KEY
+OPENAI_MODEL=gpt-4o-mini
 ```
 
 4. Levantar PostgreSQL y MongoDB.
@@ -286,6 +305,37 @@ Reglas:
 - El usuario solo ve y elimina su propio historial.
 - Se exige al menos un criterio de busqueda.
 
+### Recommendations
+
+Maneja recomendaciones con IA para usuarios turistas. Nosotros consultamos actividades activas en PostgreSQL, enviamos esas opciones a OpenAI y guardamos en MongoDB solamente la busqueda que genero una recomendacion correcta.
+
+Endpoint:
+
+```txt
+POST /api/recommendations
+```
+
+Uso recomendado en frontend:
+
+- Enviar preferencias del usuario para recibir actividades recomendadas.
+- Mostrar la explicacion que devuelve la IA en cada actividad.
+- Usar este endpoint solo con usuarios autenticados de rol `USUARIO`.
+
+Campos principales:
+
+```txt
+city
+company
+budget
+activityType
+```
+
+Reglas:
+
+- La IA no inventa actividades; solo recomienda actividades reales de PostgreSQL.
+- La clave `OPENAI_API_KEY` solo va en el backend.
+- Si la IA responde correctamente, guardamos la busqueda en MongoDB.
+
 ## Respuestas y errores comunes
 
 ```txt
@@ -310,6 +360,5 @@ Activities -> actividades turisticas creadas por propietarios
 Images     -> imagenes de actividades guardadas en Supabase Storage
 Favorites  -> actividades guardadas por usuarios
 Search History -> historial de busquedas guardado en MongoDB
+Recommendations -> recomendaciones con IA usando OpenAI
 ```
-
-El modulo de recomendaciones se agregara despues.
