@@ -5,6 +5,7 @@ function buildRecommendationPrompt(preferences, activities) {
     user: JSON.stringify({
       instructions: [
         "Select up to 5 activities that best match the user preferences.",
+        "If preferences.query exists, treat it as the main natural language request.",
         "Use only activityId values from the activities list.",
         "Write each reason in Spanish, briefly and clearly.",
         "Do not invent activities, prices, cities, categories, schedules, or contact data."

@@ -1,7 +1,8 @@
 class SearchHistory {
-  constructor({ id, userId, city, company, budget, activityType, searchedAt }) {
+  constructor({ id, userId, query, city, company, budget, activityType, searchedAt }) {
     this.id = id;
     this.userId = userId;
+    this.query = query;
     this.city = city;
     this.company = company;
     this.budget = budget;

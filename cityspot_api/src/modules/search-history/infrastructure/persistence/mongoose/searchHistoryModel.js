@@ -8,6 +8,11 @@ const searchHistorySchema = new mongoose.Schema(
       index: true,
       alias: "usuarioId"
     },
+    query: {
+      type: String,
+      default: null,
+      alias: "consulta"
+    },
     city: {
       type: String,
       default: null,

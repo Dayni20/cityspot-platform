@@ -826,7 +826,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"city\": \"Quito\",\n  \"company\": \"Amigos\",\n  \"budget\": 50,\n  \"activityType\": \"Aventura\"\n}"
+              "raw": "{\n  \"query\": \"restaurantes en quito para ir en familia con garage\",\n  \"city\": \"Quito\",\n  \"company\": \"Familia\",\n  \"budget\": null,\n  \"activityType\": \"Gastronomia\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/search-history",
@@ -919,7 +919,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"city\": \"Quito\",\n  \"budget\": 30\n}"
+              "raw": "{\n  \"query\": \"restaurantes en quito para ir en familia con garage\",\n  \"city\": \"Quito\",\n  \"company\": \"Familia\",\n  \"budget\": null,\n  \"activityType\": \"Gastronomia\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/search-history",
@@ -1068,7 +1068,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"city\": \"Quito\",\n  \"company\": \"Pareja\",\n  \"budget\": 40,\n  \"activityType\": \"Romantico\"\n}",
+              "raw": "{\n  \"query\": \"restaurantes en quito para ir en familia con garage\"\n}",
               "options": {
                 "raw": {
                   "language": "json"

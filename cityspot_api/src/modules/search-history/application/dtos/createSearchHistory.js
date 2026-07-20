@@ -1,4 +1,5 @@
 const {
+  normalizeQuery,
   normalizeCity,
   normalizeCompany,
   normalizeBudget,
@@ -7,13 +8,15 @@ const {
 } = require("../../../../shared/validators/searchHistoryValidator");
 
 class CreateSearchHistoryDto {
-  constructor({ city, company, budget, activityType }) {
+  constructor({ query, city, company, budget, activityType }) {
+    this.query = normalizeQuery(query);
     this.city = normalizeCity(city);
     this.company = normalizeCompany(company);
     this.budget = normalizeBudget(budget);
     this.activityType = normalizeActivityType(activityType);
 
     validateAtLeastOneSearchField({
+      query: this.query,
       city: this.city,
       company: this.company,
       budget: this.budget,

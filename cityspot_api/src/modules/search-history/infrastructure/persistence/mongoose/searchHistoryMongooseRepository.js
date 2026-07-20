@@ -33,6 +33,7 @@ class SearchHistoryMongooseRepository extends SearchHistoryRepository {
     return new SearchHistory({
       id: searchHistory._id.toString(),
       userId: searchHistory.userId,
+      query: searchHistory.query,
       city: searchHistory.city,
       company: searchHistory.company,
       budget: searchHistory.budget,

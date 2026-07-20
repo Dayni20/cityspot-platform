@@ -28,6 +28,16 @@ function normalizeCity(city) {
   return normalizedCity;
 }
 
+function normalizeQuery(query) {
+  const normalizedQuery = normalizeOptionalText(query, "Query", 300);
+
+  if (normalizedQuery && normalizedQuery.length < 3) {
+    throw new AppError("Query must have at least 3 characters", 400);
+  }
+
+  return normalizedQuery;
+}
+
 function normalizeCompany(company) {
   return normalizeOptionalText(company, "Company", 80);
 }
@@ -78,6 +88,7 @@ function normalizeMongoId(id, field = "Search history id") {
 
 module.exports = {
   normalizeCity,
+  normalizeQuery,
   normalizeCompany,
   normalizeBudget,
   normalizeActivityType,
