@@ -1084,7 +1084,7 @@
                 "recommendations"
               ]
             },
-            "description": "Genera recomendaciones con IA usando actividades activas de PostgreSQL. Si la IA responde correctamente, guarda el historial de busqueda en MongoDB."
+            "description": "Genera recomendaciones con IA usando Gemini y actividades activas de PostgreSQL. Si la IA responde correctamente, guarda el historial de busqueda en MongoDB."
           }
         }
       ]

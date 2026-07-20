@@ -101,8 +101,8 @@ SUPABASE_BUCKET=activity-images
 Para recomendaciones con IA tambien debe tener:
 
 ```txt
-OPENAI_API_KEY
-OPENAI_MODEL=gpt-4o-mini
+GEMINI_API_KEY
+GEMINI_MODEL=gemini-flash-latest
 ```
 
 4. Levantar PostgreSQL y MongoDB.
@@ -307,7 +307,7 @@ Reglas:
 
 ### Recommendations
 
-Maneja recomendaciones con IA para usuarios turistas. Nosotros consultamos actividades activas en PostgreSQL, enviamos esas opciones a OpenAI y guardamos en MongoDB solamente la busqueda que genero una recomendacion correcta.
+Maneja recomendaciones con IA para usuarios turistas. Nosotros consultamos actividades activas en PostgreSQL, enviamos esas opciones a Gemini y guardamos en MongoDB solamente la busqueda que genero una recomendacion correcta.
 
 Endpoint:
 
@@ -333,7 +333,7 @@ activityType
 Reglas:
 
 - La IA no inventa actividades; solo recomienda actividades reales de PostgreSQL.
-- La clave `OPENAI_API_KEY` solo va en el backend.
+- La clave `GEMINI_API_KEY` solo va en el backend.
 - Si la IA responde correctamente, guardamos la busqueda en MongoDB.
 
 ## Respuestas y errores comunes
@@ -360,5 +360,5 @@ Activities -> actividades turisticas creadas por propietarios
 Images     -> imagenes de actividades guardadas en Supabase Storage
 Favorites  -> actividades guardadas por usuarios
 Search History -> historial de busquedas guardado en MongoDB
-Recommendations -> recomendaciones con IA usando OpenAI
+Recommendations -> recomendaciones con IA usando Gemini
 ```
