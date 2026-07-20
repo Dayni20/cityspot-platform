@@ -1,4 +1,5 @@
 const AppError = require("../errors/AppError");
+const { mongoose } = require("../database/mongodb/mongoose");
 
 const CITY_REGEX = /^[\p{L}\s]+$/u;
 const ACTIVITY_TYPE_REGEX = /^[\p{L}\s]+$/u;
@@ -66,11 +67,13 @@ function validateAtLeastOneSearchField(searchData) {
 }
 
 function normalizeMongoId(id, field = "Search history id") {
-  if (!id || !String(id).trim()) {
-    throw new AppError(`${field} is required`, 400);
+  const normalizedId = String(id || "").trim();
+
+  if (!mongoose.Types.ObjectId.isValid(normalizedId)) {
+    throw new AppError(`${field} is invalid`, 400);
   }
 
-  return String(id).trim();
+  return normalizedId;
 }
 
 module.exports = {

@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const apiRoutes = require("../routes");
+const AppError = require("../../shared/errors/AppError");
 const errorHandler = require("../../shared/middlewares/errorHandler");
 
 const app = express();
@@ -22,6 +23,9 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/api", apiRoutes);
+app.use((req, res, next) => {
+  next(new AppError("Route not found", 404));
+});
 app.use(errorHandler);
 
 module.exports = app;
