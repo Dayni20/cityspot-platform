@@ -1,0 +1,28 @@
+function buildRecommendationPrompt(preferences, activities) {
+  return {
+    system:
+      "You are a tourism recommendation assistant for CitySpot. Recommend only activities from the provided list. Return valid JSON only.",
+    user: JSON.stringify({
+      instructions: [
+        "Select up to 5 activities that best match the user preferences.",
+        "Use only activityId values from the activities list.",
+        "Write each reason in Spanish, briefly and clearly.",
+        "Do not invent activities, prices, cities, categories, schedules, or contact data."
+      ],
+      responseFormat: {
+        recommendations: [
+          {
+            activityId: "number",
+            reason: "string"
+          }
+        ]
+      },
+      preferences,
+      activities
+    })
+  };
+}
+
+module.exports = {
+  buildRecommendationPrompt
+};
