@@ -1,10 +1,11 @@
-import { Compass, Heart, History, LogIn, Menu, User, X } from "lucide-react";
+import { Compass, Heart, History, LogIn, LogOut, Menu, User, X } from "lucide-react";
 import { useState } from "react";
-import { Link, NavLink, Outlet } from "react-router-dom";
-import { getCurrentUser } from "../../services/sessionStorage";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { clearSession, getCurrentUser } from "../../services/sessionStorage";
 
 function PublicLayout() {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
   const user = getCurrentUser();
   const profileTarget = user?.role === "ADMINISTRADOR" ? "/admin" : user?.role === "PROPIETARIO" ? "/owner" : "/profile";
   const links = [
@@ -12,6 +13,12 @@ function PublicLayout() {
     { to: "/favorites", label: "Favoritos", icon: Heart, roles: ["USUARIO"] },
     { to: "/search-history", label: "Historial", icon: History, roles: ["USUARIO"] }
   ].filter((link) => !link.roles || link.roles.includes(user?.role));
+
+  const handleLogout = () => {
+    clearSession();
+    setOpen(false);
+    navigate("/login");
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -30,7 +37,10 @@ function PublicLayout() {
           </nav>
           <div className="hidden items-center gap-2 md:flex">
             {user ? (
-              <Link to={profileTarget} className="flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold"><User size={17} />{user.name || "Mi perfil"}</Link>
+              <>
+                <Link to={profileTarget} className="flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold"><User size={17} />Mi perfil</Link>
+                <button onClick={handleLogout} className="flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100" type="button"><LogOut size={17} />Cerrar sesión</button>
+              </>
             ) : (
               <>
                 <Link to="/login" className="rounded-xl px-4 py-2 text-sm font-semibold text-slate-700">Ingresar</Link>
@@ -44,6 +54,7 @@ function PublicLayout() {
           <div className="border-t bg-white px-4 py-4 md:hidden">
             {links.map((link) => <Link onClick={() => setOpen(false)} key={link.to} to={link.to} className="block py-2 font-medium text-slate-700">{link.label}</Link>)}
             <Link to={user ? profileTarget : "/login"} className="mt-2 flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2 text-white"><LogIn size={17} />{user ? "Mi perfil" : "Iniciar sesion"}</Link>
+            {user && <button onClick={handleLogout} className="mt-2 flex w-full items-center gap-2 rounded-xl border px-4 py-2 font-semibold text-slate-700" type="button"><LogOut size={17} />Cerrar sesión</button>}
           </div>
         )}
       </header>
