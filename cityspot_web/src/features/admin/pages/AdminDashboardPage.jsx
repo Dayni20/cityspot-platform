@@ -1,34 +1,49 @@
-import PageHeader from "../../../components/ui/PageHeader";
+import { Image, MapPinned, Tags } from "lucide-react";
 
 function AdminDashboardPage() {
   const items = [
     {
       title: "Categorías",
-      description: "Crear, editar y controlar las categorías usadas por actividades."
+      description: "Crear, editar y controlar las categorías usadas por actividades.",
+      icon: Tags
     },
     {
       title: "Actividades",
-      description: "Revisar publicaciones y cambiar su estado a activa, pendiente o inactiva."
+      description: "Revisar publicaciones y cambiar su estado a activa, pendiente o inactiva.",
+      icon: MapPinned
     },
     {
       title: "Imágenes",
-      description: "Las imágenes se gestionan desde cada actividad por propietario o administrador."
+      description: "Las imágenes se gestionan desde cada actividad por propietario o administrador.",
+      icon: Image
     }
   ];
 
   return (
     <section>
-      <PageHeader
-        title="Panel administrativo"
-        description="Resumen de acciones disponibles para controlar CitySpot."
-      />
+      <div className="mb-8">
+        <p className="font-semibold text-brand-700">Administrador</p>
+        <h1 className="text-3xl font-black text-slate-950">Panel administrativo</h1>
+        <p className="mt-2 text-slate-500">Resumen de acciones disponibles para controlar CitySpot.</p>
+      </div>
+
       <div className="grid gap-4 md:grid-cols-3">
-        {items.map((item) => (
-          <article key={item.title} className="rounded-lg border border-slate-200 bg-white p-5">
-            <h2 className="font-semibold text-slate-950">{item.title}</h2>
-            <p className="mt-2 text-sm leading-6 text-slate-500">{item.description}</p>
-          </article>
-        ))}
+        {items.map((item) => {
+          const Icon = item.icon;
+          return (
+            <article key={item.title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h2 className="text-lg font-bold text-slate-950">{item.title}</h2>
+                  <p className="mt-3 text-sm leading-6 text-slate-500">{item.description}</p>
+                </div>
+                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-700">
+                  <Icon />
+                </span>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );

@@ -1,6 +1,6 @@
-import { LogOut, LayoutDashboard, Tags, MapPinned, Menu, X } from "lucide-react";
+import { Compass, LayoutDashboard, LogOut, MapPinned, Menu, Tags, User, X } from "lucide-react";
 import { useState } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { logout } from "../../features/auth/services/authService";
 import { getCurrentUser } from "../../services/sessionStorage";
 
@@ -24,7 +24,7 @@ function AdminLayout() {
     <div className="min-h-screen bg-slate-50 lg:flex">
       <button
         type="button"
-        className="fixed left-4 top-4 z-40 rounded-md bg-white p-2 shadow lg:hidden"
+        className="fixed left-4 top-4 z-40 rounded-xl bg-white p-2 shadow lg:hidden"
         onClick={() => setIsOpen(true)}
         aria-label="Abrir menú"
       >
@@ -37,14 +37,16 @@ function AdminLayout() {
         }`}
       >
         <div className="flex h-full flex-col">
-          <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-            <div>
-              <p className="text-lg font-semibold text-slate-950">CitySpot</p>
-              <p className="text-sm text-slate-500">Administrador</p>
+          <div className="flex items-center justify-between border-b border-slate-200 p-5">
+            <div className="flex items-center gap-2 text-xl font-black text-slate-950">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-600 text-white">
+                <Compass />
+              </span>
+              CitySpot
             </div>
             <button
               type="button"
-              className="rounded-md p-2 text-slate-500 hover:bg-slate-100 lg:hidden"
+              className="rounded-xl p-2 text-slate-500 hover:bg-slate-100 lg:hidden"
               onClick={() => setIsOpen(false)}
               aria-label="Cerrar menú"
             >
@@ -52,7 +54,12 @@ function AdminLayout() {
             </button>
           </div>
 
-          <nav className="flex-1 space-y-1 px-3 py-4">
+          <div className="px-5 py-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Panel administrativo</p>
+            <p className="mt-1 truncate font-semibold text-slate-950">{user?.name}</p>
+          </div>
+
+          <nav className="flex-1 space-y-1 px-3">
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -62,7 +69,7 @@ function AdminLayout() {
                   end={item.end}
                   onClick={() => setIsOpen(false)}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
+                    `flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold ${
                       isActive
                         ? "bg-brand-50 text-brand-700"
                         : "text-slate-600 hover:bg-slate-100 hover:text-slate-950"
@@ -75,23 +82,27 @@ function AdminLayout() {
               );
             })}
           </nav>
-
-          <div className="border-t border-slate-200 p-4">
-            <p className="truncate text-sm font-medium text-slate-900">{user?.name}</p>
-            <p className="truncate text-xs text-slate-500">{user?.email}</p>
-            <button
-              type="button"
-              className="mt-3 flex w-full items-center justify-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
-              onClick={handleLogout}
-            >
-              <LogOut size={16} />
-              Cerrar sesión
-            </button>
-          </div>
         </div>
       </aside>
 
       <main className="min-w-0 flex-1 px-4 py-16 sm:px-6 lg:px-8 lg:py-8">
+        <div className="mb-4 flex flex-col items-stretch gap-3 sm:flex-row sm:justify-end">
+          <Link
+            to="/profile"
+            className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100"
+          >
+            <User size={17} />
+            Mi perfil
+          </Link>
+          <button
+            type="button"
+            className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100"
+            onClick={handleLogout}
+          >
+            <LogOut size={17} />
+            Cerrar sesión
+          </button>
+        </div>
         <Outlet />
       </main>
     </div>
