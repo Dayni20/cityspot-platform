@@ -32,7 +32,12 @@ function ActivityDetailPage() {
     return <main className="mx-auto max-w-4xl px-4 py-20"><h1 className="text-2xl font-bold">Actividad no encontrada</h1><p className="mt-2 text-sm text-red-600">{error}</p><Link to="/activities" className="mt-4 inline-block text-brand-700">Volver</Link></main>;
   }
 
-  const mainImage = images.find((image) => image.isMain)?.url || images[0]?.url || "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80";
+  const mainImage =
+    images.find((image) => image.isMain)?.imageUrl ||
+    images.find((image) => image.isMain)?.url ||
+    images[0]?.imageUrl ||
+    images[0]?.url ||
+    "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80";
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6">

@@ -6,12 +6,32 @@ import EmptyState from "../../../components/ui/EmptyState";
 import { getCurrentUser } from "../../../services/sessionStorage";
 import { activityService } from "../../activities/services/activityService";
 import { favoriteService } from "../../favorites/services/favoriteService";
+import { imageService } from "../../images/services/imageService";
 import { recommendationService } from "../../recommendations/services/recommendationService";
 
 function getList(response, key) {
   if (Array.isArray(response)) return response;
   if (Array.isArray(response?.[key])) return response[key];
   return [];
+}
+
+async function attachMainImages(activities) {
+  return Promise.all(
+    activities.map(async (activity) => {
+      try {
+        const response = await imageService.list(activity.activityId ?? activity.id);
+        const images = getList(response, "images");
+        const mainImage = images.find((image) => image.isMain) || images[0];
+
+        return {
+          ...activity,
+          imageUrl: activity.imageUrl || mainImage?.imageUrl || mainImage?.url
+        };
+      } catch {
+        return activity;
+      }
+    })
+  );
 }
 
 function ExplorePage() {
@@ -29,7 +49,8 @@ function ExplorePage() {
     setError("");
     try {
       const activityResponse = await activityService.listPublic();
-      setActivities(getList(activityResponse, "activities"));
+      const activitiesWithImages = await attachMainImages(getList(activityResponse, "activities"));
+      setActivities(activitiesWithImages);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -74,7 +95,8 @@ function ExplorePage() {
     setError("");
     try {
       const response = await recommendationService.generate({ query: requestedQuery });
-      setRecommendations(getList(response, "recommendations"));
+      const recommendationsWithImages = await attachMainImages(getList(response, "recommendations"));
+      setRecommendations(recommendationsWithImages);
     } catch (err) {
       setError(err.message);
     } finally {

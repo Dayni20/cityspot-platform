@@ -4,11 +4,27 @@ import { Link, useNavigate } from "react-router-dom";
 import ActivityCard from "../../../components/ui/ActivityCard";
 import { activityService } from "../../activities/services/activityService";
 import { categoryService } from "../../categories/services/categoryService";
+import { imageService } from "../../images/services/imageService";
 
 function getList(response, key) {
   if (Array.isArray(response)) return response;
   if (Array.isArray(response?.[key])) return response[key];
   return [];
+}
+
+async function attachMainImages(activities) {
+  return Promise.all(
+    activities.map(async (activity) => {
+      try {
+        const response = await imageService.list(activity.id);
+        const images = getList(response, "images");
+        const mainImage = images.find((image) => image.isMain) || images[0];
+        return { ...activity, imageUrl: activity.imageUrl || mainImage?.imageUrl || mainImage?.url };
+      } catch {
+        return activity;
+      }
+    })
+  );
 }
 
 function HomePage() {
@@ -20,9 +36,10 @@ function HomePage() {
 
   useEffect(() => {
     Promise.all([categoryService.list(), activityService.listPublic()])
-      .then(([categoryResponse, activityResponse]) => {
+      .then(async ([categoryResponse, activityResponse]) => {
         setCategories(getList(categoryResponse, "categories"));
-        setActivities(getList(activityResponse, "activities").slice(0, 3));
+        const activitiesWithImages = await attachMainImages(getList(activityResponse, "activities").slice(0, 3));
+        setActivities(activitiesWithImages);
       })
       .catch(() => {
         setCategories([]);

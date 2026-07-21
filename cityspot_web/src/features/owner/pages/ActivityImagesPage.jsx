@@ -87,7 +87,7 @@ function ActivityImagesPage() {
           <p className="text-sm text-slate-500">Cargando imagenes...</p>
         ) : images.map((image) => (
           <article key={image.id} className="overflow-hidden rounded-2xl border bg-white">
-            <img src={image.url} alt={image.description || "Imagen de actividad"} className="h-48 w-full object-cover" />
+            <img src={image.imageUrl || image.url} alt={image.description || "Imagen de actividad"} className="h-48 w-full object-cover" />
             <div className="p-4">
               <p className="text-sm text-slate-600">{image.description || "Sin descripcion"}</p>
               <div className="mt-3 flex gap-2">

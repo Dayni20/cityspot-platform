@@ -5,6 +5,7 @@ function ActivityCard({ activity, favorite = false, onFavorite }) {
     activity.image ||
     activity.mainImage ||
     activity.imageUrl ||
+    activity.images?.[0]?.imageUrl ||
     activity.images?.[0]?.url ||
     "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80";
   const category = activity.category || activity.categoryName || "Actividad";
