@@ -1,13 +1,14 @@
-import { Compass, Heart, History, LogIn, LogOut, Menu, User, X } from "lucide-react";
+import { Compass, Heart, History, LayoutDashboard, LogIn, LogOut, Menu, User, X } from "lucide-react";
 import { useState } from "react";
-import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { clearSession, getCurrentUser } from "../../services/sessionStorage";
 
 function PublicLayout() {
   const [open, setOpen] = useState(false);
+  const location = useLocation();
   const navigate = useNavigate();
   const user = getCurrentUser();
-  const profileTarget = user?.role === "ADMINISTRADOR" ? "/admin" : user?.role === "PROPIETARIO" ? "/owner" : "/profile";
+  const isProfilePage = location.pathname === "/profile";
   const links = [
     { to: "/activities", label: "Explorar", roles: [undefined, "USUARIO"] },
     { to: "/favorites", label: "Favoritos", icon: Heart, roles: ["USUARIO"] },
@@ -24,10 +25,17 @@ function PublicLayout() {
     <div className="min-h-screen bg-slate-50">
       <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
-          <Link to="/" className="flex items-center gap-2 text-xl font-black text-slate-950">
-            <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-600 text-white"><Compass /></span>
-            CitySpot
-          </Link>
+          {isProfilePage ? (
+            <div className="flex items-center gap-2 text-xl font-black text-slate-950">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-600 text-white"><Compass /></span>
+              CitySpot
+            </div>
+          ) : (
+            <Link to="/" className="flex items-center gap-2 text-xl font-black text-slate-950">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-600 text-white"><Compass /></span>
+              CitySpot
+            </Link>
+          )}
           <nav className="hidden items-center gap-6 md:flex">
             {links.map((link) => (
               <NavLink key={link.to} to={link.to} className={({ isActive }) => `text-sm font-semibold ${isActive ? "text-brand-700" : "text-slate-600 hover:text-slate-950"}`}>
@@ -38,7 +46,10 @@ function PublicLayout() {
           <div className="hidden items-center gap-2 md:flex">
             {user ? (
               <>
-                <Link to={profileTarget} className="flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold"><User size={17} />Mi perfil</Link>
+                {user.role === "ADMINISTRADOR" && (
+                  <Link to="/admin" className="flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"><LayoutDashboard size={17} />Menú administrativo</Link>
+                )}
+                <Link to="/profile" className="flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold"><User size={17} />Mi perfil</Link>
                 <button onClick={handleLogout} className="flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100" type="button"><LogOut size={17} />Cerrar sesión</button>
               </>
             ) : (
@@ -53,7 +64,8 @@ function PublicLayout() {
         {open && (
           <div className="border-t bg-white px-4 py-4 md:hidden">
             {links.map((link) => <Link onClick={() => setOpen(false)} key={link.to} to={link.to} className="block py-2 font-medium text-slate-700">{link.label}</Link>)}
-            <Link to={user ? profileTarget : "/login"} className="mt-2 flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2 text-white"><LogIn size={17} />{user ? "Mi perfil" : "Iniciar sesion"}</Link>
+            {user?.role === "ADMINISTRADOR" && <Link onClick={() => setOpen(false)} to="/admin" className="mt-2 flex items-center gap-2 rounded-xl border px-4 py-2 font-semibold text-slate-700"><LayoutDashboard size={17} />Menú administrativo</Link>}
+            <Link onClick={() => setOpen(false)} to={user ? "/profile" : "/login"} className="mt-2 flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2 text-white"><LogIn size={17} />{user ? "Mi perfil" : "Iniciar sesion"}</Link>
             {user && <button onClick={handleLogout} className="mt-2 flex w-full items-center gap-2 rounded-xl border px-4 py-2 font-semibold text-slate-700" type="button"><LogOut size={17} />Cerrar sesión</button>}
           </div>
         )}

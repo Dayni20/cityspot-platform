@@ -38,12 +38,12 @@ function AdminLayout() {
       >
         <div className="flex h-full flex-col">
           <div className="flex items-center justify-between border-b border-slate-200 p-5">
-            <div className="flex items-center gap-2 text-xl font-black text-slate-950">
+            <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center gap-2 text-xl font-black text-slate-950">
               <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-600 text-white">
                 <Compass />
               </span>
               CitySpot
-            </div>
+            </Link>
             <button
               type="button"
               className="rounded-xl p-2 text-slate-500 hover:bg-slate-100 lg:hidden"
