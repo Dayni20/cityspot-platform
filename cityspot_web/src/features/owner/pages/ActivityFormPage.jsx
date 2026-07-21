@@ -1,6 +1,7 @@
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, LogOut, Save, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { clearSession } from "../../../services/sessionStorage";
 import { activityService } from "../../activities/services/activityService";
 import { categoryService } from "../../categories/services/categoryService";
 
@@ -48,6 +49,11 @@ function ActivityFormPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const isEditing = Boolean(id);
+
+  const handleLogout = () => {
+    clearSession();
+    navigate("/login");
+  };
 
   useEffect(() => {
     categoryService.list()
@@ -109,9 +115,30 @@ function ActivityFormPage() {
 
   return (
     <section>
-      <Link to="/owner/activities" className="flex items-center gap-2 text-sm font-semibold text-slate-600"><ArrowLeft size={17} /> Volver</Link>
-      <h1 className="mt-4 text-3xl font-black">{isEditing ? "Editar actividad" : "Nueva actividad"}</h1>
-      <p className="mt-2 text-slate-500">Completa la informacion de la actividad.</p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <Link to="/owner/activities" className="flex items-center gap-2 text-sm font-semibold text-slate-600"><ArrowLeft size={17} /> Volver</Link>
+          <h1 className="mt-4 text-3xl font-black">{isEditing ? "Editar actividad" : "Nueva actividad"}</h1>
+          <p className="mt-2 text-slate-500">Completa la informacion de la actividad.</p>
+        </div>
+        <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-start">
+          <Link
+            to="/profile"
+            className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100"
+          >
+            <User size={17} />
+            Mi perfil
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100"
+            type="button"
+          >
+            <LogOut size={17} />
+            Cerrar sesión
+          </button>
+        </div>
+      </div>
 
       {error && <p className="mt-5 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
 

@@ -1,6 +1,7 @@
-import { CheckCircle2, Clock3, MapPinned, PlusCircle } from "lucide-react";
+import { CheckCircle2, Clock3, LogOut, MapPinned, PlusCircle, User } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { clearSession } from "../../../services/sessionStorage";
 import { activityService } from "../../activities/services/activityService";
 
 function getList(response) {
@@ -12,6 +13,12 @@ function getList(response) {
 function OwnerDashboardPage() {
   const [activities, setActivities] = useState([]);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    clearSession();
+    navigate("/login");
+  };
 
   useEffect(() => {
     activityService.listMine()
@@ -32,7 +39,23 @@ function OwnerDashboardPage() {
           <p className="font-semibold text-brand-700">Propietario</p>
           <h1 className="text-3xl font-black">Resumen de publicaciones</h1>
         </div>
-        <Link to="/owner/activities/new" className="flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-3 font-bold text-white"><PlusCircle size={18} /> Nueva actividad</Link>
+        <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-start">
+          <Link
+            to="/profile"
+            className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100"
+          >
+            <User size={17} />
+            Mi perfil
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100"
+            type="button"
+          >
+            <LogOut size={17} />
+            Cerrar sesión
+          </button>
+        </div>
       </div>
 
       {error && <p className="mt-6 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
@@ -44,7 +67,11 @@ function OwnerDashboardPage() {
         })}
       </div>
 
-      <div className="mt-8 rounded-2xl border bg-white p-6">
+      <div className="mt-5 flex justify-end">
+        <Link to="/owner/activities/new" className="flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-3 font-bold text-white"><PlusCircle size={18} /> Nueva actividad</Link>
+      </div>
+
+      <div className="mt-5 rounded-2xl border bg-white p-6">
         <h2 className="text-xl font-bold">Estado de tus actividades</h2>
         <div className="mt-4 space-y-3">
           {activities.map((activity) => (
