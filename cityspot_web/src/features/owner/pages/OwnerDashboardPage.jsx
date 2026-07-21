@@ -1,5 +1,65 @@
 import { CheckCircle2, Clock3, MapPinned, PlusCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { activities } from "../../../data/mockData";
-function OwnerDashboardPage(){const mine=activities.filter(a=>a.ownerId===2);const cards=[{label:"Mis actividades",value:mine.length,icon:MapPinned},{label:"Activas",value:mine.filter(a=>a.status==="ACTIVA").length,icon:CheckCircle2},{label:"Pendientes",value:mine.filter(a=>a.status==="PENDIENTE").length,icon:Clock3}];return <section><div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"><div><p className="font-semibold text-brand-700">Propietario</p><h1 className="text-3xl font-black">Resumen de publicaciones</h1></div><Link to="/owner/activities/new" className="flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-3 font-bold text-white"><PlusCircle size={18}/>Nueva actividad</Link></div><div className="mt-8 grid gap-4 md:grid-cols-3">{cards.map(c=>{const Icon=c.icon;return <article key={c.label} className="rounded-2xl border bg-white p-6 shadow-sm"><div className="flex items-center justify-between"><div><p className="text-sm text-slate-500">{c.label}</p><p className="mt-2 text-3xl font-black">{c.value}</p></div><span className="grid h-12 w-12 place-items-center rounded-xl bg-brand-50 text-brand-700"><Icon/></span></div></article>})}</div><div className="mt-8 rounded-2xl border bg-white p-6"><h2 className="text-xl font-bold">Estado de tus actividades</h2><div className="mt-4 space-y-3">{mine.map(a=><div key={a.id} className="flex items-center justify-between rounded-xl bg-slate-50 p-4"><div><p className="font-semibold">{a.name}</p><p className="text-sm text-slate-500">{a.city} · {a.category}</p></div><span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-700">{a.status}</span></div>)}</div></div></section>}
+import { activityService } from "../../activities/services/activityService";
+
+function getList(response) {
+  if (Array.isArray(response)) return response;
+  if (Array.isArray(response?.activities)) return response.activities;
+  return [];
+}
+
+function OwnerDashboardPage() {
+  const [activities, setActivities] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    activityService.listMine()
+      .then((response) => setActivities(getList(response)))
+      .catch((err) => setError(err.message));
+  }, []);
+
+  const cards = [
+    { label: "Mis actividades", value: activities.length, icon: MapPinned },
+    { label: "Activas", value: activities.filter((activity) => activity.status === "ACTIVA").length, icon: CheckCircle2 },
+    { label: "Pendientes", value: activities.filter((activity) => activity.status === "PENDIENTE").length, icon: Clock3 }
+  ];
+
+  return (
+    <section>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="font-semibold text-brand-700">Propietario</p>
+          <h1 className="text-3xl font-black">Resumen de publicaciones</h1>
+        </div>
+        <Link to="/owner/activities/new" className="flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-3 font-bold text-white"><PlusCircle size={18} /> Nueva actividad</Link>
+      </div>
+
+      {error && <p className="mt-6 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
+
+      <div className="mt-8 grid gap-4 md:grid-cols-3">
+        {cards.map((card) => {
+          const Icon = card.icon;
+          return <article key={card.label} className="rounded-2xl border bg-white p-6 shadow-sm"><div className="flex items-center justify-between"><div><p className="text-sm text-slate-500">{card.label}</p><p className="mt-2 text-3xl font-black">{card.value}</p></div><span className="grid h-12 w-12 place-items-center rounded-xl bg-brand-50 text-brand-700"><Icon /></span></div></article>;
+        })}
+      </div>
+
+      <div className="mt-8 rounded-2xl border bg-white p-6">
+        <h2 className="text-xl font-bold">Estado de tus actividades</h2>
+        <div className="mt-4 space-y-3">
+          {activities.map((activity) => (
+            <div key={activity.id} className="flex items-center justify-between rounded-xl bg-slate-50 p-4">
+              <div>
+                <p className="font-semibold">{activity.name}</p>
+                <p className="text-sm text-slate-500">{activity.city} · Categoria {activity.categoryId}</p>
+              </div>
+              <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-700">{activity.status}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default OwnerDashboardPage;

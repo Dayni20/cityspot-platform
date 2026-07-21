@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import ActivityCard from "../../../components/ui/ActivityCard";
 import EmptyState from "../../../components/ui/EmptyState";
-import { activities as mockActivities } from "../../../data/mockData";
 import { favoriteService } from "../services/favoriteService";
 
 function getFavoritesFromResponse(response) {
@@ -12,19 +11,16 @@ function getFavoritesFromResponse(response) {
 
 function getActivityFromFavorite(favorite) {
   const activity = favorite.activity ?? favorite;
-  const mockActivity = mockActivities.find((item) => item.id === activity.id || item.id === favorite.activityId);
 
   return {
-    ...mockActivity,
     ...activity,
     id: activity.id ?? favorite.activityId,
-    category: activity.category ?? mockActivity?.category ?? `Categoria ${activity.categoryId ?? ""}`.trim(),
+    category: activity.category ?? `Categoria ${activity.categoryId ?? ""}`.trim(),
     image:
       activity.image ??
       activity.mainImage ??
       activity.imageUrl ??
       activity.images?.[0]?.url ??
-      mockActivity?.image ??
       "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"
   };
 }
