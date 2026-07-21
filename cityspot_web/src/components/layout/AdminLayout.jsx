@@ -1,5 +1,5 @@
 import { Compass, LayoutDashboard, LogOut, MapPinned, Menu, Tags, User, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { logout } from "../../features/auth/services/authService";
 import { getCurrentUser } from "../../services/sessionStorage";
@@ -19,6 +19,18 @@ function AdminLayout() {
     logout();
     navigate("/login", { replace: true });
   };
+
+  useEffect(() => {
+    const clearAdminSessionOnHistoryNavigation = () => {
+      logout();
+    };
+
+    window.addEventListener("popstate", clearAdminSessionOnHistoryNavigation);
+
+    return () => {
+      window.removeEventListener("popstate", clearAdminSessionOnHistoryNavigation);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-50 lg:flex">

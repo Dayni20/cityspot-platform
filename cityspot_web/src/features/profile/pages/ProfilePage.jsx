@@ -12,6 +12,7 @@ function ProfilePage() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const isAdmin = user.role === "ADMINISTRADOR";
 
   useEffect(() => {
     profileService.get()
@@ -73,7 +74,7 @@ function ProfilePage() {
           <label className="text-sm font-semibold">Telefono<input className="field mt-1" value={form.phone} onChange={(event) => setForm({ ...form, phone: event.target.value })} /></label>
           <label className="text-sm font-semibold sm:col-span-2">Correo<input type="email" className="field mt-1" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} /></label>
           <button disabled={loading} className="flex items-center justify-center gap-2 rounded-xl bg-brand-600 py-3 font-bold text-white disabled:opacity-60 sm:col-span-2"><Save size={18} />{loading ? "Guardando..." : "Guardar cambios"}</button>
-          <button type="button" onClick={deactivate} className="flex items-center justify-center gap-2 rounded-xl border border-red-200 py-3 font-bold text-red-600 sm:col-span-2"><Trash2 size={18} />Desactivar cuenta</button>
+          {!isAdmin && <button type="button" onClick={deactivate} className="flex items-center justify-center gap-2 rounded-xl border border-red-200 py-3 font-bold text-red-600 sm:col-span-2"><Trash2 size={18} />Desactivar cuenta</button>}
         </form>
       </div>
     </main>

@@ -10,7 +10,6 @@ function PublicLayout() {
   const user = getCurrentUser();
   const isProfilePage = location.pathname === "/profile";
   const links = [
-    { to: "/activities", label: "Explorar", roles: [undefined, "USUARIO"] },
     { to: "/favorites", label: "Favoritos", icon: Heart, roles: ["USUARIO"] },
     { to: "/search-history", label: "Historial", icon: History, roles: ["USUARIO"] }
   ].filter((link) => !link.roles || link.roles.includes(user?.role));
