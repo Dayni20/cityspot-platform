@@ -53,7 +53,7 @@ class UserController {
   }
 
   async deactivateProfile(req, res) {
-    const user = await deactivateUser.execute(req.user.id);
+    const user = await deactivateUser.execute(req.user);
 
     res.status(200).json({
       message: "User deactivated successfully",

@@ -6,8 +6,12 @@ class DeactivateUserUseCase {
     this.userRepository = userRepository;
   }
 
-  async execute(userId) {
-    const user = await this.userRepository.updateStatus(userId, "INACTIVO");
+  async execute(authenticatedUser) {
+    if (authenticatedUser.role === "ADMINISTRADOR") {
+      throw new AppError("Administrators cannot deactivate their own account", 403);
+    }
+
+    const user = await this.userRepository.updateStatus(authenticatedUser.id, "INACTIVO");
 
     if (!user) {
       throw new AppError("User not found", 404);
