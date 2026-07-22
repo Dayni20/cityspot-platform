@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ActivityCard from "../../../components/ui/ActivityCard";
 import EmptyState from "../../../components/ui/EmptyState";
+import { imageService } from "../../images/services/imageService";
 import { favoriteService } from "../services/favoriteService";
 
 function getFavoritesFromResponse(response) {
@@ -21,9 +22,29 @@ function getActivityFromFavorite(favorite) {
       activity.mainImage ??
       activity.imageUrl ??
       activity.images?.[0]?.imageUrl ??
-      activity.images?.[0]?.url ??
-      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"
+      activity.images?.[0]?.url
   };
+}
+
+function getList(response, key) {
+  if (Array.isArray(response)) return response;
+  if (Array.isArray(response?.[key])) return response[key];
+  return [];
+}
+
+async function attachMainImage(activity) {
+  try {
+    const response = await imageService.list(activity.id);
+    const images = getList(response, "images");
+    const mainImage = images.find((image) => image.isMain) || images[0];
+
+    return {
+      ...activity,
+      image: activity.image || activity.mainImage || activity.imageUrl || mainImage?.imageUrl || mainImage?.url
+    };
+  } catch {
+    return activity;
+  }
 }
 
 function FavoritesPage() {
@@ -38,7 +59,13 @@ function FavoritesPage() {
 
     try {
       const response = await favoriteService.list();
-      setFavorites(getFavoritesFromResponse(response));
+      const favoritesWithImages = await Promise.all(
+        getFavoritesFromResponse(response).map(async (favorite) => ({
+          ...favorite,
+          activity: await attachMainImage(getActivityFromFavorite(favorite))
+        }))
+      );
+      setFavorites(favoritesWithImages);
     } catch (err) {
       setError(err.message);
     } finally {
