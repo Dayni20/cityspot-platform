@@ -25,6 +25,7 @@ const protectedPaths = [
   { matches: (path) => path === "/admin" || path.startsWith("/admin/"), roles: ["ADMINISTRADOR"] },
   { matches: (path) => path === "/owner" || path.startsWith("/owner/"), roles: ["PROPIETARIO"] },
   { matches: (path) => path === "/profile", roles: ["USUARIO", "PROPIETARIO", "ADMINISTRADOR"] },
+  { matches: (path) => path.startsWith("/activities/"), roles: ["USUARIO", "PROPIETARIO", "ADMINISTRADOR"] },
   { matches: (path) => path === "/favorites", roles: ["USUARIO"] },
   { matches: (path) => path === "/search-history", roles: ["USUARIO"] }
 ];
@@ -76,7 +77,14 @@ function App() {
         <Route element={<PublicLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/activities" element={<ExplorePage />} />
-          <Route path="/activities/:id" element={<ActivityDetailPage />} />
+          <Route
+            path="/activities/:id"
+            element={
+              <ProtectedRoute allowedRoles={["USUARIO", "PROPIETARIO", "ADMINISTRADOR"]}>
+                <ActivityDetailPage />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/profile"
             element={
