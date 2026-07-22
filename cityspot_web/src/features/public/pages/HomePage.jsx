@@ -96,10 +96,9 @@ function HomePage() {
           </Link>
         </div>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {categories.map((category, index) => (
+          {categories.map((category) => (
             <Link key={category.id} to={`/activities?categoryId=${category.id}`} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:border-brand-300 hover:shadow-md">
-              <div className="grid h-12 w-12 place-items-center rounded-xl bg-brand-50 text-xl font-black text-brand-700">{index + 1}</div>
-              <h3 className="mt-5 text-lg font-bold">{category.name}</h3>
+              <h3 className="text-lg font-bold">{category.name}</h3>
               <p className="mt-2 text-sm leading-6 text-slate-500">{category.description}</p>
             </Link>
           ))}

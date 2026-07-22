@@ -37,6 +37,7 @@ async function attachMainImages(activities) {
 function ExplorePage() {
   const [params] = useSearchParams();
   const [query, setQuery] = useState(params.get("query") || "");
+  const categoryId = params.get("categoryId") || "";
   const [activities, setActivities] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
   const [favoriteIds, setFavoriteIds] = useState([]);
@@ -48,7 +49,7 @@ function ExplorePage() {
     setLoading(true);
     setError("");
     try {
-      const activityResponse = await activityService.listPublic();
+      const activityResponse = await activityService.listPublic({ categoryId });
       const activitiesWithImages = await attachMainImages(getList(activityResponse, "activities"));
       setActivities(activitiesWithImages);
     } catch (err) {
@@ -64,7 +65,7 @@ function ExplorePage() {
         generateRecommendations(query.trim());
       }
     });
-  }, []);
+  }, [categoryId]);
 
   useEffect(() => {
     if (user?.role !== "USUARIO") return;
@@ -127,14 +128,17 @@ function ExplorePage() {
     const normalizedQuery = query.trim().toLowerCase();
 
     return activities.filter((activity) => {
+      const matchesCategory =
+        !categoryId ||
+        String(activity.categoryId ?? activity.category?.id ?? "") === categoryId;
       const matchesQuery =
         !normalizedQuery ||
         [activity.name, activity.description, activity.city, activity.category]
           .filter(Boolean)
           .some((value) => String(value).toLowerCase().includes(normalizedQuery));
-      return matchesQuery;
+      return matchesCategory && matchesQuery;
     });
-  }, [activities, query]);
+  }, [activities, query, categoryId]);
 
   const visibleActivities = recommendations.length ? recommendations : filteredActivities;
   const isShowingRecommendations = recommendations.length > 0;
