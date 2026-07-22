@@ -1,7 +1,7 @@
 import { Compass, LayoutDashboard, MapPinned, Menu, PlusCircle, X } from "lucide-react";
-import { useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
-import { getCurrentUser } from "../../services/sessionStorage";
+import { useEffect, useState } from "react";
+import { Link, NavLink, Outlet } from "react-router-dom";
+import { clearSession, getCurrentUser } from "../../services/sessionStorage";
 
 const links = [
   { to: "/owner", label: "Resumen", icon: LayoutDashboard, end: true },
@@ -12,6 +12,18 @@ const links = [
 function OwnerLayout() {
   const [open, setOpen] = useState(false);
   const user = getCurrentUser();
+
+  useEffect(() => {
+    const clearOwnerSessionOnHistoryNavigation = () => {
+      clearSession();
+    };
+
+    window.addEventListener("popstate", clearOwnerSessionOnHistoryNavigation);
+
+    return () => {
+      window.removeEventListener("popstate", clearOwnerSessionOnHistoryNavigation);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-50 lg:flex">
@@ -30,12 +42,12 @@ function OwnerLayout() {
       >
         <div className="flex h-full flex-col">
           <div className="flex items-center justify-between border-b p-5">
-            <div className="flex items-center gap-2 text-xl font-black">
+            <Link to="/" onClick={() => setOpen(false)} className="flex items-center gap-2 text-xl font-black">
               <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-600 text-white">
                 <Compass />
               </span>
               CitySpot
-            </div>
+            </Link>
             <button className="lg:hidden" onClick={() => setOpen(false)} type="button">
               <X />
             </button>

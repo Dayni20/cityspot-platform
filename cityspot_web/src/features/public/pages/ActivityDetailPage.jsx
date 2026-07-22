@@ -60,8 +60,6 @@ function ActivityDetailPage() {
           <aside className="h-fit rounded-2xl border bg-slate-50 p-6">
             <p className="text-sm text-slate-500">Precio referencial</p>
             <p className="mt-1 flex items-center text-3xl font-black"><DollarSign size={25} />{activity.referencePrice ?? "N/D"}</p>
-            <a href={activity.contactEmail ? `mailto:${activity.contactEmail}` : undefined} className="mt-6 inline-flex w-full justify-center rounded-xl bg-brand-600 px-4 py-3 font-bold text-white hover:bg-brand-700">Contactar al propietario</a>
-            <p className="mt-4 text-center text-xs text-slate-500">La reserva se coordina directamente con el proveedor.</p>
           </aside>
         </div>
       </div>

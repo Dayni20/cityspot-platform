@@ -19,7 +19,7 @@ function OwnerActivitiesPage() {
 
   const handleLogout = () => {
     clearSession();
-    navigate("/login");
+    navigate("/login", { replace: true });
   };
 
   useEffect(() => {

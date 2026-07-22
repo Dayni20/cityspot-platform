@@ -22,7 +22,6 @@ function AdminDashboardPage() {
   return (
     <section>
       <div className="mb-8">
-        <p className="font-semibold text-brand-700">Administrador</p>
         <h1 className="text-3xl font-black text-slate-950">Panel administrativo</h1>
         <p className="mt-2 text-slate-500">Resumen de acciones disponibles para controlar CitySpot.</p>
       </div>

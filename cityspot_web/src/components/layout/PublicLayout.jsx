@@ -1,5 +1,5 @@
 import { Compass, Heart, History, LayoutDashboard, LogIn, LogOut, Menu, User, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { clearSession, getCurrentUser } from "../../services/sessionStorage";
 
@@ -10,6 +10,7 @@ function PublicLayout() {
   const user = getCurrentUser();
   const isProfilePage = location.pathname === "/profile";
   const links = [
+    { to: "/activities", label: "Explorar", roles: ["USUARIO"] },
     { to: "/favorites", label: "Favoritos", icon: Heart, roles: ["USUARIO"] },
     { to: "/search-history", label: "Historial", icon: History, roles: ["USUARIO"] }
   ].filter((link) => !link.roles || link.roles.includes(user?.role));
@@ -17,8 +18,22 @@ function PublicLayout() {
   const handleLogout = () => {
     clearSession();
     setOpen(false);
-    navigate("/login");
+    navigate("/login", { replace: true });
   };
+
+  useEffect(() => {
+    if (user?.role !== "USUARIO") return undefined;
+
+    const clearUserSessionOnHistoryNavigation = () => {
+      clearSession();
+    };
+
+    window.addEventListener("popstate", clearUserSessionOnHistoryNavigation);
+
+    return () => {
+      window.removeEventListener("popstate", clearUserSessionOnHistoryNavigation);
+    };
+  }, [user?.role]);
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -48,6 +63,9 @@ function PublicLayout() {
                 {user.role === "ADMINISTRADOR" && (
                   <Link to="/admin" className="flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"><LayoutDashboard size={17} />Menú administrativo</Link>
                 )}
+                {user.role === "PROPIETARIO" && (
+                  <Link to="/owner" className="flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"><LayoutDashboard size={17} />Menú propietario</Link>
+                )}
                 <Link to="/profile" className="flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold"><User size={17} />Mi perfil</Link>
                 <button onClick={handleLogout} className="flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100" type="button"><LogOut size={17} />Cerrar sesión</button>
               </>
@@ -64,6 +82,7 @@ function PublicLayout() {
           <div className="border-t bg-white px-4 py-4 md:hidden">
             {links.map((link) => <Link onClick={() => setOpen(false)} key={link.to} to={link.to} className="block py-2 font-medium text-slate-700">{link.label}</Link>)}
             {user?.role === "ADMINISTRADOR" && <Link onClick={() => setOpen(false)} to="/admin" className="mt-2 flex items-center gap-2 rounded-xl border px-4 py-2 font-semibold text-slate-700"><LayoutDashboard size={17} />Menú administrativo</Link>}
+            {user?.role === "PROPIETARIO" && <Link onClick={() => setOpen(false)} to="/owner" className="mt-2 flex items-center gap-2 rounded-xl border px-4 py-2 font-semibold text-slate-700"><LayoutDashboard size={17} />Menú propietario</Link>}
             <Link onClick={() => setOpen(false)} to={user ? "/profile" : "/login"} className="mt-2 flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2 text-white"><LogIn size={17} />{user ? "Mi perfil" : "Iniciar sesion"}</Link>
             {user && <button onClick={handleLogout} className="mt-2 flex w-full items-center gap-2 rounded-xl border px-4 py-2 font-semibold text-slate-700" type="button"><LogOut size={17} />Cerrar sesión</button>}
           </div>

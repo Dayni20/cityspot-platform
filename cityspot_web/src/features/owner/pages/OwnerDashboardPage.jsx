@@ -1,4 +1,4 @@
-import { CheckCircle2, Clock3, LogOut, MapPinned, PlusCircle, User } from "lucide-react";
+import { CheckCircle2, Clock3, LogOut, MapPinned, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { clearSession } from "../../../services/sessionStorage";
@@ -17,7 +17,7 @@ function OwnerDashboardPage() {
 
   const handleLogout = () => {
     clearSession();
-    navigate("/login");
+    navigate("/login", { replace: true });
   };
 
   useEffect(() => {
@@ -36,7 +36,6 @@ function OwnerDashboardPage() {
     <section>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="font-semibold text-brand-700">Propietario</p>
           <h1 className="text-3xl font-black">Resumen de publicaciones</h1>
         </div>
         <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-start">
@@ -67,11 +66,7 @@ function OwnerDashboardPage() {
         })}
       </div>
 
-      <div className="mt-5 flex justify-end">
-        <Link to="/owner/activities/new" className="flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-3 font-bold text-white"><PlusCircle size={18} /> Nueva actividad</Link>
-      </div>
-
-      <div className="mt-5 rounded-2xl border bg-white p-6">
+      <div className="mt-8 rounded-2xl border bg-white p-6">
         <h2 className="text-xl font-bold">Estado de tus actividades</h2>
         <div className="mt-4 space-y-3">
           {activities.map((activity) => (
