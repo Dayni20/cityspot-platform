@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ActivityCard from "../../../components/ui/ActivityCard";
 import EmptyState from "../../../components/ui/EmptyState";
 import { getCurrentUser } from "../../../services/sessionStorage";
@@ -35,9 +35,11 @@ async function attachMainImages(activities) {
 }
 
 function ExplorePage() {
+  const navigate = useNavigate();
   const [params] = useSearchParams();
   const [query, setQuery] = useState(params.get("query") || "");
   const categoryId = params.get("categoryId") || "";
+  const usesAiSearch = params.get("mode") === "ai";
   const [activities, setActivities] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
   const [favoriteIds, setFavoriteIds] = useState([]);
@@ -61,11 +63,11 @@ function ExplorePage() {
 
   useEffect(() => {
     loadActivities().then(() => {
-      if (query.trim()) {
+      if (usesAiSearch && query.trim()) {
         generateRecommendations(query.trim());
       }
     });
-  }, [categoryId]);
+  }, [categoryId, usesAiSearch]);
 
   useEffect(() => {
     if (user?.role !== "USUARIO") return;
@@ -77,8 +79,9 @@ function ExplorePage() {
 
   const search = async (event) => {
     event.preventDefault();
-    if (query.trim()) {
-      await generateRecommendations(query.trim());
+
+    if (!user) {
+      navigate("/login");
       return;
     }
 
@@ -87,10 +90,7 @@ function ExplorePage() {
   };
 
   const generateRecommendations = async (requestedQuery = query.trim()) => {
-    if (!requestedQuery) {
-      setError("Escribe lo que quieres buscar para generar recomendaciones.");
-      return;
-    }
+    if (!requestedQuery) return;
 
     setLoading(true);
     setError("");
@@ -133,7 +133,15 @@ function ExplorePage() {
         String(activity.categoryId ?? activity.category?.id ?? "") === categoryId;
       const matchesQuery =
         !normalizedQuery ||
-        [activity.name, activity.description, activity.city, activity.category]
+        [
+          activity.name,
+          activity.description,
+          activity.city,
+          activity.category,
+          activity.categoryName,
+          activity.category?.name,
+          activity.categoryId
+        ]
           .filter(Boolean)
           .some((value) => String(value).toLowerCase().includes(normalizedQuery));
       return matchesCategory && matchesQuery;
@@ -172,7 +180,6 @@ function ExplorePage() {
               Mostrando recomendaciones generadas con IA para: <strong>{query}</strong>
             </p>
           )}
-
           {visibleActivities.length ? (
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {visibleActivities.map((activity) => {
@@ -180,11 +187,6 @@ function ExplorePage() {
                 return (
                   <div key={activityId} className="space-y-3">
                     <ActivityCard activity={{ ...activity, id: activityId }} favorite={favoriteIds.includes(activityId)} onFavorite={toggleFavorite} />
-                    {activity.reason && (
-                      <p className="rounded-xl border border-emerald-100 bg-white px-4 py-3 text-sm leading-6 text-slate-600">
-                        <strong className="text-emerald-700">Por que se recomienda:</strong> {activity.reason}
-                      </p>
-                    )}
                   </div>
                 );
               })}

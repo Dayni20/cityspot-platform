@@ -36,7 +36,7 @@ function PublicLayout() {
   }, [user?.role]);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="flex min-h-screen flex-col bg-slate-50">
       <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
           {isProfilePage ? (
@@ -88,8 +88,10 @@ function PublicLayout() {
           </div>
         )}
       </header>
-      <Outlet />
-      <footer className="mt-16 border-t bg-slate-950 py-10 text-slate-300">
+      <div className="flex-1">
+        <Outlet />
+      </div>
+      <footer className="mt-auto border-t bg-slate-950 py-10 text-slate-300">
         <div className="mx-auto max-w-7xl px-4">
           <p className="text-lg font-bold text-white">CitySpot</p>
           <p className="mt-2 text-sm">Descubre experiencias, lugares y actividades de Ecuador.</p>

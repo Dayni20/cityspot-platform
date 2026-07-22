@@ -1,7 +1,8 @@
-import { ArrowRight, MapPin, Search, Sparkles } from "lucide-react";
+import { ArrowRight, Search, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ActivityCard from "../../../components/ui/ActivityCard";
+import { getCurrentUser } from "../../../services/sessionStorage";
 import { activityService } from "../../activities/services/activityService";
 import { categoryService } from "../../categories/services/categoryService";
 import { imageService } from "../../images/services/imageService";
@@ -29,8 +30,8 @@ async function attachMainImages(activities) {
 
 function HomePage() {
   const navigate = useNavigate();
+  const user = getCurrentUser();
   const [query, setQuery] = useState("");
-  const [city, setCity] = useState("");
   const [categories, setCategories] = useState([]);
   const [activities, setActivities] = useState([]);
 
@@ -51,7 +52,7 @@ function HomePage() {
     event.preventDefault();
     const params = new URLSearchParams();
     if (query.trim()) params.set("query", query.trim());
-    if (city.trim()) params.set("city", city.trim());
+    if (query.trim()) params.set("mode", "ai");
     navigate(`/activities?${params.toString()}`);
   };
 
@@ -71,17 +72,15 @@ function HomePage() {
             </p>
           </div>
 
-          <form onSubmit={submit} className="mt-10 grid max-w-5xl gap-3 rounded-2xl bg-white p-3 shadow-2xl md:grid-cols-[1.4fr_1fr_auto]">
-            <label className="flex items-center gap-3 rounded-xl bg-slate-50 px-4">
-              <Search className="text-brand-600" size={20} />
-              <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="restaurantes en Quito para ir en familia" className="w-full bg-transparent py-4 text-slate-900 outline-none" />
-            </label>
-            <label className="flex items-center gap-3 rounded-xl bg-slate-50 px-4">
-              <MapPin className="text-brand-600" size={20} />
-              <input value={city} onChange={(event) => setCity(event.target.value)} placeholder="Ciudad" className="w-full bg-transparent py-4 text-slate-900 outline-none" />
-            </label>
-            <button className="rounded-xl bg-brand-600 px-7 py-4 font-bold text-white hover:bg-brand-700">Buscar</button>
-          </form>
+          {user && (
+            <form onSubmit={submit} className="mt-10 grid max-w-5xl gap-3 rounded-2xl bg-white p-3 shadow-2xl md:grid-cols-[1fr_auto]">
+              <label className="flex items-center gap-3 rounded-xl bg-slate-50 px-4">
+                <Search className="text-brand-600" size={20} />
+                <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="restaurantes en Quito para ir en familia" className="w-full bg-transparent py-4 text-slate-900 outline-none" />
+              </label>
+              <button className="rounded-xl bg-brand-600 px-7 py-4 font-bold text-white hover:bg-brand-700">Buscar</button>
+            </form>
+          )}
         </div>
       </section>
 

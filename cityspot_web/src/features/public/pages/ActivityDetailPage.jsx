@@ -1,4 +1,4 @@
-import { ArrowLeft, Clock, DollarSign, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowLeft, Clock, DollarSign, ExternalLink, Mail, MapPin, Navigation, Phone } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { activityService } from "../../activities/services/activityService";
@@ -10,6 +10,8 @@ function ActivityDetailPage() {
   const [images, setImages] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [distance, setDistance] = useState(null);
+  const [locationError, setLocationError] = useState("");
 
   useEffect(() => {
     Promise.all([
@@ -38,6 +40,35 @@ function ActivityDetailPage() {
     images[0]?.imageUrl ||
     images[0]?.url ||
     "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80";
+  const latitude = Number(activity.latitude);
+  const longitude = Number(activity.longitude);
+  const hasCoordinates = Number.isFinite(latitude) && Number.isFinite(longitude);
+  const mapsUrl = hasCoordinates
+    ? `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`
+    : "";
+
+  const calculateDistance = () => {
+    setLocationError("");
+
+    if (!hasCoordinates) {
+      setLocationError("Esta actividad no tiene coordenadas registradas.");
+      return;
+    }
+
+    if (!navigator.geolocation) {
+      setLocationError("Tu navegador no permite calcular la ubicacion.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const userLatitude = position.coords.latitude;
+        const userLongitude = position.coords.longitude;
+        setDistance(getDistanceInKm(userLatitude, userLongitude, latitude, longitude));
+      },
+      () => setLocationError("No fue posible obtener tu ubicacion actual.")
+    );
+  };
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
@@ -60,6 +91,18 @@ function ActivityDetailPage() {
           <aside className="h-fit rounded-2xl border bg-slate-50 p-6">
             <p className="text-sm text-slate-500">Precio referencial</p>
             <p className="mt-1 flex items-center text-3xl font-black"><DollarSign size={25} />{activity.referencePrice ?? "N/D"}</p>
+            <div className="mt-6 space-y-3">
+              {hasCoordinates ? (
+                <>
+                  <a href={mapsUrl} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-3 font-bold text-white hover:bg-brand-700"><ExternalLink size={18} /> Ver en Google Maps</a>
+                  <button type="button" onClick={calculateDistance} className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 font-bold text-slate-700 hover:bg-slate-100"><Navigation size={18} /> Calcular cercania</button>
+                </>
+              ) : (
+                <p className="rounded-xl bg-white px-4 py-3 text-sm text-slate-500">Ubicacion geografica no registrada.</p>
+              )}
+              {distance !== null && <p className="rounded-xl bg-brand-50 px-4 py-3 text-center text-sm font-semibold text-brand-700">Estas a {distance.toFixed(1)} km aprox.</p>}
+              {locationError && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{locationError}</p>}
+            </div>
           </aside>
         </div>
       </div>
@@ -69,6 +112,25 @@ function ActivityDetailPage() {
 
 function Info({ icon: Icon, label, value }) {
   return <div className="flex gap-3 rounded-xl border p-4"><Icon className="mt-0.5 text-brand-600" size={20} /><div><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">{label}</p><p className="mt-1 text-sm font-medium text-slate-700">{value}</p></div></div>;
+}
+
+function getDistanceInKm(startLatitude, startLongitude, endLatitude, endLongitude) {
+  const earthRadiusKm = 6371;
+  const latitudeDistance = toRadians(endLatitude - startLatitude);
+  const longitudeDistance = toRadians(endLongitude - startLongitude);
+  const startLatitudeRadians = toRadians(startLatitude);
+  const endLatitudeRadians = toRadians(endLatitude);
+  const calculation =
+    Math.sin(latitudeDistance / 2) * Math.sin(latitudeDistance / 2) +
+    Math.cos(startLatitudeRadians) *
+      Math.cos(endLatitudeRadians) *
+      Math.sin(longitudeDistance / 2) *
+      Math.sin(longitudeDistance / 2);
+  return earthRadiusKm * 2 * Math.atan2(Math.sqrt(calculation), Math.sqrt(1 - calculation));
+}
+
+function toRadians(value) {
+  return (value * Math.PI) / 180;
 }
 
 export default ActivityDetailPage;

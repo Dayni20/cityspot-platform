@@ -1,4 +1,4 @@
-import { Image, MapPinned, Tags } from "lucide-react";
+import { MapPinned, Tags } from "lucide-react";
 
 function AdminDashboardPage() {
   const items = [
@@ -11,11 +11,6 @@ function AdminDashboardPage() {
       title: "Actividades",
       description: "Revisar publicaciones y cambiar su estado a activa, pendiente o inactiva.",
       icon: MapPinned
-    },
-    {
-      title: "Imágenes",
-      description: "Las imágenes se gestionan desde cada actividad por propietario o administrador.",
-      icon: Image
     }
   ];
 
@@ -26,7 +21,7 @@ function AdminDashboardPage() {
         <p className="mt-2 text-slate-500">Resumen de acciones disponibles para controlar CitySpot.</p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2">
         {items.map((item) => {
           const Icon = item.icon;
           return (
