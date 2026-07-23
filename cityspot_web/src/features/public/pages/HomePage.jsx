@@ -74,7 +74,7 @@ function HomePage() {
 
     const intervalId = window.setInterval(() => {
       setHeroIndex((current) => (current + 1) % visibleHeroSlides.length);
-    }, 3500);
+    }, 2000);
 
     return () => window.clearInterval(intervalId);
   }, [visibleHeroSlides.length]);
