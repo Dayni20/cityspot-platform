@@ -1,6 +1,7 @@
 import { Compass, Eye, EyeOff, LogIn } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import loginBackground from "../../../assets/login-background.png";
 import { login } from "../services/authService";
 
 function LoginPage() {
@@ -66,10 +67,14 @@ function LoginPage() {
   };
 
   return (
-    <main className="grid min-h-screen place-items-center bg-gradient-to-br from-slate-100 to-brand-50 px-4">
+    <main
+      className="relative grid min-h-screen place-items-center bg-cover bg-[center_70%] px-4"
+      style={{ backgroundImage: `url(${loginBackground})` }}
+    >
+      <div className="absolute inset-0 bg-slate-950/15" />
       <form
         onSubmit={submit}
-        className="w-full max-w-md rounded-3xl border bg-white p-8 shadow-xl"
+        className="relative z-10 w-full max-w-md rounded-3xl border border-white/50 bg-white/85 p-8 shadow-2xl backdrop-blur-sm"
       >
         <Link
           to="/"
