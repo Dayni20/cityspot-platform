@@ -1,8 +1,10 @@
-import { ArrowLeft, Clock, DollarSign, ExternalLink, Mail, MapPin, Navigation, Phone } from "lucide-react";
+import { ArrowLeft, Clock, DollarSign, ExternalLink, Mail, MapPin, MessageCircleQuestion, Navigation, Phone, Send } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { getCurrentUser } from "../../../services/sessionStorage";
 import { activityService } from "../../activities/services/activityService";
 import { imageService } from "../../images/services/imageService";
+import { inquiryService } from "../../inquiries/services/inquiryService";
 
 function ActivityDetailPage() {
   const { id } = useParams();
@@ -12,14 +14,35 @@ function ActivityDetailPage() {
   const [loading, setLoading] = useState(true);
   const [distance, setDistance] = useState(null);
   const [locationError, setLocationError] = useState("");
+  const [question, setQuestion] = useState("");
+  const [inquiryMessage, setInquiryMessage] = useState("");
+  const [sendingInquiry, setSendingInquiry] = useState(false);
+  const user = getCurrentUser();
 
   useEffect(() => {
+    const loadActivity = async () => {
+      try {
+        const activityResponse = await activityService.getById(id);
+        return activityResponse.activity ?? activityResponse;
+      } catch (err) {
+        const listResponse = await activityService.listPublic();
+        const activities = Array.isArray(listResponse?.activities) ? listResponse.activities : [];
+        const fallbackActivity = activities.find((item) => String(item.id) === String(id));
+
+        if (!fallbackActivity) {
+          throw err;
+        }
+
+        return fallbackActivity;
+      }
+    };
+
     Promise.all([
-      activityService.getById(id),
+      loadActivity(),
       imageService.list(id).catch(() => ({ images: [] }))
     ])
-      .then(([activityResponse, imageResponse]) => {
-        setActivity(activityResponse.activity ?? activityResponse);
+      .then(([activityData, imageResponse]) => {
+        setActivity(activityData);
         setImages(Array.isArray(imageResponse?.images) ? imageResponse.images : []);
       })
       .catch((err) => setError(err.message))
@@ -70,6 +93,23 @@ function ActivityDetailPage() {
     );
   };
 
+  const sendInquiry = async (event) => {
+    event.preventDefault();
+    setError("");
+    setInquiryMessage("");
+    setSendingInquiry(true);
+
+    try {
+      await inquiryService.create(activity.id, { question });
+      setQuestion("");
+      setInquiryMessage("Tu consulta fue enviada al propietario.");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSendingInquiry(false);
+    }
+  };
+
   return (
     <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
       <Link to="/activities" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600"><ArrowLeft size={17} /> Volver a explorar</Link>
@@ -102,6 +142,36 @@ function ActivityDetailPage() {
               )}
               {distance !== null && <p className="rounded-xl bg-brand-50 px-4 py-3 text-center text-sm font-semibold text-brand-700">Estas a {distance.toFixed(1)} km aprox.</p>}
               {locationError && <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{locationError}</p>}
+            </div>
+            <div className="mt-6 border-t border-slate-200 pt-6">
+              <div className="flex items-center gap-2">
+                <MessageCircleQuestion className="text-brand-600" size={20} />
+                <h2 className="font-bold text-slate-950">Contactar propietario</h2>
+              </div>
+              {user?.role === "USUARIO" ? (
+                <form onSubmit={sendInquiry} className="mt-4 space-y-3">
+                  <textarea
+                    value={question}
+                    onChange={(event) => setQuestion(event.target.value)}
+                    className="min-h-28 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-brand-500"
+                    placeholder="Ejemplo: Se permiten mascotas?"
+                    maxLength={500}
+                  />
+                  <button
+                    type="submit"
+                    disabled={sendingInquiry}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-3 font-bold text-white hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    <Send size={18} />
+                    {sendingInquiry ? "Enviando..." : "Enviar consulta"}
+                  </button>
+                  {inquiryMessage && <p className="rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{inquiryMessage}</p>}
+                </form>
+              ) : (
+                <p className="mt-4 rounded-xl bg-white px-4 py-3 text-sm text-slate-500">
+                  Solo los usuarios turistas pueden enviar consultas al propietario.
+                </p>
+              )}
             </div>
           </aside>
         </div>

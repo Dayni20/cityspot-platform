@@ -10,10 +10,12 @@ import RegisterPage from "./features/auth/pages/RegisterPage";
 import CategoriesPage from "./features/categories/pages/CategoriesPage";
 import FavoritesPage from "./features/favorites/pages/FavoritesPage";
 import SearchHistoryPage from "./features/history/pages/SearchHistoryPage";
+import MyInquiriesPage from "./features/inquiries/pages/MyInquiriesPage";
 import ActivityFormPage from "./features/owner/pages/ActivityFormPage";
 import ActivityImagesPage from "./features/owner/pages/ActivityImagesPage";
 import OwnerActivitiesPage from "./features/owner/pages/OwnerActivitiesPage";
 import OwnerDashboardPage from "./features/owner/pages/OwnerDashboardPage";
+import OwnerInquiriesPage from "./features/owner/pages/OwnerInquiriesPage";
 import ActivityDetailPage from "./features/public/pages/ActivityDetailPage";
 import ExplorePage from "./features/public/pages/ExplorePage";
 import HomePage from "./features/public/pages/HomePage";
@@ -27,7 +29,8 @@ const protectedPaths = [
   { matches: (path) => path === "/profile", roles: ["USUARIO", "PROPIETARIO", "ADMINISTRADOR"] },
   { matches: (path) => path.startsWith("/activities/"), roles: ["USUARIO", "PROPIETARIO", "ADMINISTRADOR"] },
   { matches: (path) => path === "/favorites", roles: ["USUARIO"] },
-  { matches: (path) => path === "/search-history", roles: ["USUARIO"] }
+  { matches: (path) => path === "/search-history", roles: ["USUARIO"] },
+  { matches: (path) => path === "/consultas", roles: ["USUARIO"] }
 ];
 
 function getPathProtection(pathname) {
@@ -109,6 +112,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/consultas"
+            element={
+              <ProtectedRoute allowedRoles={["USUARIO"]}>
+                <MyInquiriesPage />
+              </ProtectedRoute>
+            }
+          />
         </Route>
 
         <Route path="/login" element={<LoginPage />} />
@@ -124,6 +135,7 @@ function App() {
         >
           <Route index element={<OwnerDashboardPage />} />
           <Route path="activities" element={<OwnerActivitiesPage />} />
+          <Route path="inquiries" element={<OwnerInquiriesPage />} />
           <Route path="activities/new" element={<ActivityFormPage />} />
           <Route path="activities/:id/edit" element={<ActivityFormPage />} />
           <Route path="activities/:id/images" element={<ActivityImagesPage />} />

@@ -149,6 +149,42 @@ CREATE TABLE IF NOT EXISTS favoritos (
 
 
 -- =====================================================
+-- TABLA: consultas_actividad
+-- Permite que un usuario pregunte al propietario sobre una actividad.
+-- =====================================================
+
+CREATE TABLE IF NOT EXISTS consultas_actividad (
+    id_consulta SERIAL PRIMARY KEY,
+    id_actividad INT NOT NULL,
+    id_usuario INT NOT NULL,
+    id_propietario INT NOT NULL,
+    pregunta VARCHAR(500) NOT NULL,
+    respuesta VARCHAR(500),
+    respuesta_leida BOOLEAN NOT NULL DEFAULT FALSE,
+    estado VARCHAR(20) NOT NULL DEFAULT 'PENDIENTE'
+        CHECK (estado IN ('PENDIENTE', 'RESPONDIDA')),
+    fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    fecha_respuesta TIMESTAMP,
+
+    CONSTRAINT fk_consulta_actividad
+        FOREIGN KEY (id_actividad)
+        REFERENCES actividades(id_actividad)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_consulta_usuario
+        FOREIGN KEY (id_usuario)
+        REFERENCES usuarios(id_usuario)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_consulta_propietario
+        FOREIGN KEY (id_propietario)
+        REFERENCES usuarios(id_usuario)
+        ON DELETE CASCADE
+);
+
+
+
+-- =====================================================
 -- INDICES
 -- Mejoran la velocidad de las consultas frecuentes.
 -- =====================================================
@@ -178,9 +214,22 @@ CREATE UNIQUE INDEX IF NOT EXISTS uq_imagen_principal_por_actividad
 CREATE INDEX IF NOT EXISTS idx_favoritos_actividad
     ON favoritos(id_actividad);
 
+CREATE INDEX IF NOT EXISTS idx_consultas_usuario
+    ON consultas_actividad(id_usuario);
+
+CREATE INDEX IF NOT EXISTS idx_consultas_propietario
+    ON consultas_actividad(id_propietario);
+
+CREATE INDEX IF NOT EXISTS idx_consultas_actividad
+    ON consultas_actividad(id_actividad);
 
 
----AÑADIR ADMINISTRADOR MANUAL
+
+
+
+
+
+---AÑADIR ADMIN
 INSERT INTO usuarios (
   nombre,
   correo,
@@ -197,7 +246,8 @@ INSERT INTO usuarios (
   'ACTIVO'
 );
 
---INSERTAR CATEGORIAS 
+
+--INSERTAR CATEGORIAS
 INSERT INTO categorias (nombre, descripcion)
 VALUES
   ('Aventura', 'Actividades al aire libre, deportes extremos y experiencias de adrenalina.'),
@@ -207,3 +257,116 @@ VALUES
   ('Relax', 'Spas, termas, descanso y bienestar.'),
   ('Entretenimiento', 'Eventos, bares, conciertos, shows y actividades recreativas.')
 ON CONFLICT (nombre) DO NOTHING;
+
+
+
+SELECT * FROM usuarios
+
+---------------------------------------------------------------------------
+INSERT INTO actividades (
+    id_propietario,
+    id_categoria,
+    nombre,
+    descripcion,
+    ciudad,
+    direccion,
+    latitud,
+    longitud,
+    precio_referencial,
+    horario,
+    telefono_contacto,
+    correo_contacto,
+    estado,
+    fecha_creacion,
+    fecha_actualizacion
+)
+SELECT
+    3,
+    c.id_categoria,
+    v.nombre,
+    v.descripcion,
+    v.ciudad,
+    v.direccion,
+    v.latitud,
+    v.longitud,
+    v.precio_referencial,
+    v.horario,
+    v.telefono_contacto,
+    v.correo_contacto,
+    'ACTIVA',
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+FROM categorias c
+CROSS JOIN (
+    VALUES
+    (
+        'Ruta de comida tradicional quiteña',
+        'Recorrido gastronómico para probar platos típicos como locro de papa, empanadas de viento y canelazo en locales tradicionales.',
+        'Quito',
+        'Centro Historico de Quito',
+        -0.220164,
+        -78.512327,
+        18.00,
+        'Lunes a sabado de 10:00 a 18:00',
+        '0987654321',
+        'owner.gastronomia@cityspot.com'
+    ),
+    (
+        'Experiencia de chocolate artesanal',
+        'Actividad guiada para conocer el proceso del cacao ecuatoriano y preparar una degustación de chocolate artesanal.',
+        'Quito',
+        'La Floresta, Quito',
+        -0.199910,
+        -78.484650,
+        22.50,
+        'Martes a domingo de 09:00 a 17:00',
+        '0987654322',
+        'owner.gastronomia@cityspot.com'
+    ),
+    (
+        'Cena típica en Guayaquil',
+        'Experiencia gastronómica con platos costeños como encebollado, bolón, seco de chivo y jugos naturales.',
+        'Guayaquil',
+        'Malecón 2000, Guayaquil',
+        -2.189412,
+        -79.889066,
+        25.00,
+        'Viernes a domingo de 17:00 a 22:00',
+        '0987654323',
+        'owner.gastronomia@cityspot.com'
+    ),
+    (
+        'Tour de café ecuatoriano',
+        'Visita a una cafetería especializada para aprender métodos de filtrado, origen del grano y degustación de café nacional.',
+        'Cuenca',
+        'Centro Historico de Cuenca',
+        -2.900128,
+        -79.005896,
+        16.00,
+        'Lunes a viernes de 08:00 a 16:00',
+        '0987654324',
+        'owner.gastronomia@cityspot.com'
+    )
+) AS v(
+    nombre,
+    descripcion,
+    ciudad,
+    direccion,
+    latitud,
+    longitud,
+    precio_referencial,
+    horario,
+    telefono_contacto,
+    correo_contacto
+)
+WHERE LOWER(c.nombre) = LOWER('Gastronomia');
+
+---------------------------------------------------
+
+
+DROP TABLE IF EXISTS favoritos CASCADE;
+DROP TABLE IF EXISTS imagenes_actividad CASCADE;
+DROP TABLE IF EXISTS consultas_actividad CASCADE;
+DROP TABLE IF EXISTS actividades CASCADE;
+DROP TABLE IF EXISTS categorias CASCADE;
+DROP TABLE IF EXISTS usuarios CASCADE;

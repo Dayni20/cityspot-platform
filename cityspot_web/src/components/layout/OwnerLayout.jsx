@@ -1,16 +1,19 @@
-import { Compass, LayoutDashboard, MapPinned, Menu, PlusCircle, X } from "lucide-react";
+import { Compass, LayoutDashboard, MapPinned, Menu, MessageCircleQuestion, PlusCircle, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { clearSession, getCurrentUser } from "../../services/sessionStorage";
+import { inquiryService } from "../../features/inquiries/services/inquiryService";
 
 const links = [
   { to: "/owner", label: "Resumen", icon: LayoutDashboard, end: true },
   { to: "/owner/activities", label: "Mis actividades", icon: MapPinned },
+  { to: "/owner/inquiries", label: "Consultas", icon: MessageCircleQuestion },
   { to: "/owner/activities/new", label: "Nueva actividad", icon: PlusCircle }
 ];
 
 function OwnerLayout() {
   const [open, setOpen] = useState(false);
+  const [pendingCount, setPendingCount] = useState(0);
   const user = getCurrentUser();
 
   useEffect(() => {
@@ -23,6 +26,12 @@ function OwnerLayout() {
     return () => {
       window.removeEventListener("popstate", clearOwnerSessionOnHistoryNavigation);
     };
+  }, []);
+
+  useEffect(() => {
+    inquiryService.ownerPendingCount()
+      .then((response) => setPendingCount(Number(response.pendingCount) || 0))
+      .catch(() => setPendingCount(0));
   }, []);
 
   return (
@@ -74,7 +83,12 @@ function OwnerLayout() {
                   }
                 >
                   <Icon size={18} />
-                  {link.label}
+                  <span className="flex-1">{link.label}</span>
+                  {link.to === "/owner/inquiries" && pendingCount > 0 && (
+                    <span className="grid min-h-5 min-w-5 place-items-center rounded-full bg-red-500 px-1.5 text-xs font-bold leading-none text-white">
+                      {pendingCount > 99 ? "99+" : pendingCount}
+                    </span>
+                  )}
                 </NavLink>
               );
             })}

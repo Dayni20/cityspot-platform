@@ -13,6 +13,10 @@ class SearchHistoryMongooseRepository extends SearchHistoryRepository {
     return history.map((item) => this.toEntity(item));
   }
 
+  async countByUserId(userId) {
+    return SearchHistoryModel.countDocuments({ userId });
+  }
+
   async deleteByIdAndUserId(id, userId) {
     const result = await SearchHistoryModel.deleteOne({ _id: id, userId });
     return result.deletedCount > 0;
