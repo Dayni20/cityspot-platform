@@ -71,7 +71,7 @@ function LoginPage() {
       className="relative grid min-h-screen place-items-center bg-cover bg-[center_70%] px-4"
       style={{ backgroundImage: `url(${loginBackground})` }}
     >
-      <div className="absolute inset-0 bg-slate-950/15" />
+      <div className="absolute inset-0 bg-slate-950/35" />
       <form
         onSubmit={submit}
         className="relative z-10 w-full max-w-md rounded-3xl border border-white/50 bg-white/85 p-8 shadow-2xl backdrop-blur-sm"

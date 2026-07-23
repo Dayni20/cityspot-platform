@@ -43,12 +43,13 @@ function HomePage() {
   const [aiRecommendations, setAiRecommendations] = useState([]);
   const [categories, setCategories] = useState([]);
   const [activities, setActivities] = useState([]);
+  const [heroIndex, setHeroIndex] = useState(0);
 
   useEffect(() => {
     Promise.all([categoryService.list(), activityService.listPublic()])
       .then(async ([categoryResponse, activityResponse]) => {
         setCategories(getList(categoryResponse, "categories"));
-        const activitiesWithImages = await attachMainImages(getList(activityResponse, "activities").slice(0, 3));
+        const activitiesWithImages = await attachMainImages(getList(activityResponse, "activities").slice(0, 6));
         setActivities(activitiesWithImages);
       })
       .catch(() => {
@@ -56,6 +57,31 @@ function HomePage() {
         setActivities([]);
       });
   }, []);
+
+  const heroSlides = activities
+    .filter((activity) => activity.imageUrl)
+    .map((activity) => ({
+      id: activity.id,
+      title: activity.name,
+      city: activity.city,
+      imageUrl: activity.imageUrl
+    }));
+
+  const visibleHeroSlides = heroSlides;
+
+  useEffect(() => {
+    if (visibleHeroSlides.length <= 1) return undefined;
+
+    const intervalId = window.setInterval(() => {
+      setHeroIndex((current) => (current + 1) % visibleHeroSlides.length);
+    }, 3500);
+
+    return () => window.clearInterval(intervalId);
+  }, [visibleHeroSlides.length]);
+
+  useEffect(() => {
+    setHeroIndex(0);
+  }, [visibleHeroSlides.length]);
 
   const submit = async (event) => {
     event.preventDefault();
@@ -98,18 +124,38 @@ function HomePage() {
     <main>
       <section className="relative overflow-hidden bg-gradient-to-br from-brand-900 via-brand-700 to-cyan-600 text-white">
         <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:py-28">
-          <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-sm font-medium">
-              <Sparkles size={16} /> Explora Ecuador de una forma diferente
-            </span>
-            <h1 className="mt-6 text-4xl font-black leading-tight sm:text-6xl">
-              Encuentra tu proxima experiencia inolvidable
-            </h1>
-            <p className="mt-5 max-w-2xl text-lg text-teal-50">
-              Actividades, cultura, gastronomia y naturaleza reunidas en un solo lugar.
-            </p>
-          </div>
+          <div className="grid items-center gap-10 lg:grid-cols-[1fr_430px]">
+            <div className="max-w-3xl">
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-sm font-medium">
+                <Sparkles size={16} /> Explora Ecuador de una forma diferente
+              </span>
+              <h1 className="mt-6 text-4xl font-black leading-tight sm:text-6xl">
+                Encuentra tu proxima experiencia inolvidable
+              </h1>
+              <p className="mt-5 max-w-2xl text-lg text-teal-50">
+                Actividades, cultura, gastronomia y naturaleza reunidas en un solo lugar.
+              </p>
+            </div>
 
+            {visibleHeroSlides.length > 0 && (
+              <div className="relative hidden aspect-[4/3] overflow-hidden rounded-3xl border border-white/20 bg-white/10 shadow-2xl lg:block">
+                {visibleHeroSlides.map((slide, index) => (
+                  <img
+                    key={slide.id}
+                    src={slide.imageUrl}
+                    alt={slide.title}
+                    className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${
+                      index === heroIndex ? "opacity-100" : "opacity-0"
+                    }`}
+                  />
+                ))}
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/80 to-transparent p-5">
+                  <p className="text-sm font-bold">{visibleHeroSlides[heroIndex]?.title}</p>
+                  <p className="mt-1 text-xs text-teal-50">{visibleHeroSlides[heroIndex]?.city}</p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
