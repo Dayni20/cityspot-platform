@@ -21,7 +21,7 @@ import ExplorePage from "./features/public/pages/ExplorePage";
 import HomePage from "./features/public/pages/HomePage";
 import ProfilePage from "./features/profile/pages/ProfilePage";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import { getCurrentUser, getToken } from "./services/sessionStorage";
+import { clearSession, getCurrentUser, getSessionExpiresAt, getToken, isSessionExpired } from "./services/sessionStorage";
 
 const protectedPaths = [
   { matches: (path) => path === "/admin" || path.startsWith("/admin/"), roles: ["ADMINISTRADOR"] },
@@ -47,6 +47,12 @@ function AuthHistoryGuard() {
 
       if (!protection) return;
 
+      if (isSessionExpired()) {
+        clearSession();
+        navigate("/login", { replace: true });
+        return;
+      }
+
       const token = getToken();
       const user = getCurrentUser();
 
@@ -67,6 +73,27 @@ function AuthHistoryGuard() {
       window.removeEventListener("pageshow", verifySession);
       window.removeEventListener("popstate", verifyAfterHistoryChange);
     };
+  }, [location.pathname, navigate]);
+
+  useEffect(() => {
+    const expiresAt = getSessionExpiresAt();
+
+    if (!expiresAt) return undefined;
+
+    const remainingTime = expiresAt - Date.now();
+
+    if (remainingTime <= 0) {
+      clearSession();
+      navigate("/login", { replace: true });
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      clearSession();
+      navigate("/login", { replace: true });
+    }, remainingTime);
+
+    return () => window.clearTimeout(timeoutId);
   }, [location.pathname, navigate]);
 
   return null;
