@@ -1,5 +1,6 @@
 import { CheckCircle2, Clock3, MapPinned } from "lucide-react";
 import { useEffect, useState } from "react";
+import OwnerReviewNotifications from "../../../components/ui/OwnerReviewNotifications";
 import ProfileActionsMenu from "../../../components/ui/ProfileActionsMenu";
 import { activityService } from "../../activities/services/activityService";
 
@@ -31,7 +32,10 @@ function OwnerDashboardPage() {
         <div>
           <h1 className="text-3xl font-black">Resumen de publicaciones</h1>
         </div>
-        <ProfileActionsMenu />
+        <div className="flex items-center gap-3">
+          <OwnerReviewNotifications />
+          <ProfileActionsMenu />
+        </div>
       </div>
 
       {error && <p className="mt-6 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}

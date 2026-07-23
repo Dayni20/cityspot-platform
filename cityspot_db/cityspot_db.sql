@@ -183,6 +183,42 @@ CREATE TABLE IF NOT EXISTS consultas_actividad (
 );
 
 
+-- =====================================================
+-- TABLA: resenas_actividad
+-- Guarda calificaciones y comentarios de usuarios sobre actividades.
+-- =====================================================
+
+CREATE TABLE IF NOT EXISTS resenas_actividad (
+    id_resena SERIAL PRIMARY KEY,
+    id_actividad INT NOT NULL,
+    id_usuario INT NOT NULL,
+    id_propietario INT NOT NULL,
+    calificacion INT NOT NULL
+        CHECK (calificacion BETWEEN 1 AND 5),
+    comentario VARCHAR(500) NOT NULL,
+    leida_propietario BOOLEAN NOT NULL DEFAULT FALSE,
+    fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_resena_actividad
+        FOREIGN KEY (id_actividad)
+        REFERENCES actividades(id_actividad)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_resena_usuario
+        FOREIGN KEY (id_usuario)
+        REFERENCES usuarios(id_usuario)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_resena_propietario
+        FOREIGN KEY (id_propietario)
+        REFERENCES usuarios(id_usuario)
+        ON DELETE CASCADE,
+
+    CONSTRAINT uq_resena_usuario_actividad
+        UNIQUE (id_usuario, id_actividad)
+);
+
+
 
 -- =====================================================
 -- INDICES
@@ -222,6 +258,18 @@ CREATE INDEX IF NOT EXISTS idx_consultas_propietario
 
 CREATE INDEX IF NOT EXISTS idx_consultas_actividad
     ON consultas_actividad(id_actividad);
+
+CREATE INDEX IF NOT EXISTS idx_resenas_actividad
+    ON resenas_actividad(id_actividad);
+
+CREATE INDEX IF NOT EXISTS idx_resenas_usuario
+    ON resenas_actividad(id_usuario);
+
+CREATE INDEX IF NOT EXISTS idx_resenas_propietario
+    ON resenas_actividad(id_propietario);
+
+CREATE INDEX IF NOT EXISTS idx_resenas_propietario_leida
+    ON resenas_actividad(id_propietario, leida_propietario);
 
 
 

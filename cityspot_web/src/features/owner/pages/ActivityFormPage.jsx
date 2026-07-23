@@ -1,6 +1,7 @@
 import { ArrowLeft, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import OwnerReviewNotifications from "../../../components/ui/OwnerReviewNotifications";
 import ProfileActionsMenu from "../../../components/ui/ProfileActionsMenu";
 import { activityService } from "../../activities/services/activityService";
 import { categoryService } from "../../categories/services/categoryService";
@@ -119,7 +120,10 @@ function ActivityFormPage() {
           <h1 className="mt-4 text-3xl font-black">{isEditing ? "Editar actividad" : "Nueva actividad"}</h1>
           <p className="mt-2 text-slate-500">Completa la informacion de la actividad.</p>
         </div>
-        <ProfileActionsMenu />
+        <div className="flex items-center gap-3">
+          <OwnerReviewNotifications />
+          <ProfileActionsMenu />
+        </div>
       </div>
 
       {error && <p className="mt-5 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}

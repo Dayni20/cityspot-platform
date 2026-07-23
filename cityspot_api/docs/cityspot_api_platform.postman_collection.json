@@ -1185,6 +1185,152 @@
       ]
     },
     {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Create Activity Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 5,\n  \"comment\": \"Excelente experiencia, la comida estuvo muy buena.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/activities/{{reviewActivityId}}/reviews",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "activities",
+                "{{reviewActivityId}}",
+                "reviews"
+              ]
+            },
+            "description": "Permite que un usuario turista deje una resena con calificacion de 1 a 5 sobre una actividad activa."
+          },
+          "response": []
+        },
+        {
+          "name": "List Activity Reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/activities/{{reviewActivityId}}/reviews",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "activities",
+                "{{reviewActivityId}}",
+                "reviews"
+              ]
+            },
+            "description": "Lista las resenas publicas de una actividad."
+          },
+          "response": []
+        },
+        {
+          "name": "List Owner Reviews",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reviews/owner",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reviews",
+                "owner"
+              ]
+            },
+            "description": "Lista las resenas recibidas por el propietario autenticado."
+          },
+          "response": []
+        },
+        {
+          "name": "Count Owner Unread Reviews",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reviews/owner/unread-count",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reviews",
+                "owner",
+                "unread-count"
+              ]
+            },
+            "description": "Cuenta resenas nuevas que el propietario aun no ha leido."
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Owner Reviews As Read",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/reviews/owner/read",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reviews",
+                "owner",
+                "read"
+              ]
+            },
+            "description": "Marca como leidas las resenas nuevas del propietario autenticado."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "Recommendations",
       "item": [
         {
@@ -1324,6 +1470,11 @@
     {
       "key": "inquiryId",
       "value": "",
+      "type": "string"
+    },
+    {
+      "key": "reviewActivityId",
+      "value": "5",
       "type": "string"
     }
   ]

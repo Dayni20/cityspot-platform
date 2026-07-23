@@ -7,6 +7,7 @@ const favoriteRoutes = require("../../modules/favorites/infrastructure/routes/fa
 const searchHistoryRoutes = require("../../modules/search-history/infrastructure/routes/searchHistoryRoutes");
 const recommendationRoutes = require("../../modules/recommendations/infrastructure/routes/recommendationRoutes");
 const inquiryRoutes = require("../../modules/inquiries/infrastructure/routes/inquiryRoutes");
+const reviewRoutes = require("../../modules/reviews/infrastructure/routes/reviewRoutes");
 
 const router = Router();
 
@@ -18,5 +19,6 @@ router.use("/favorites", favoriteRoutes);
 router.use("/search-history", searchHistoryRoutes);
 router.use("/recommendations", recommendationRoutes);
 router.use("/", inquiryRoutes);
+router.use("/", reviewRoutes);
 
 module.exports = router;
