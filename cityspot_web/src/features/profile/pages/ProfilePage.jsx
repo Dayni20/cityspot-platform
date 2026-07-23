@@ -1,4 +1,4 @@
-import { Save, Trash2, UserCircle } from "lucide-react";
+import { KeyRound, Save, Trash2, UserCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { clearSession, getCurrentUser, getToken, saveSession } from "../../../services/sessionStorage";
@@ -9,9 +9,11 @@ function ProfilePage() {
   const currentUser = getCurrentUser() || {};
   const [user, setUser] = useState(currentUser);
   const [form, setForm] = useState({ name: currentUser.name || "", email: currentUser.email || "", phone: currentUser.phone || "" });
+  const [passwordForm, setPasswordForm] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [passwordLoading, setPasswordLoading] = useState(false);
   const isAdmin = user.role === "ADMINISTRADOR";
 
   useEffect(() => {
@@ -55,6 +57,23 @@ function ProfilePage() {
     }
   };
 
+  const updatePassword = async (event) => {
+    event.preventDefault();
+    setPasswordLoading(true);
+    setError("");
+    setMessage("");
+
+    try {
+      await profileService.updatePassword(passwordForm);
+      setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
+      setMessage("Contrasena actualizada correctamente.");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setPasswordLoading(false);
+    }
+  };
+
   return (
     <main className="mx-auto max-w-4xl px-4 py-12">
       <div className="rounded-3xl border bg-white p-8 shadow-sm">
@@ -75,6 +94,50 @@ function ProfilePage() {
           <label className="text-sm font-semibold sm:col-span-2">Correo<input type="email" className="field mt-1" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} /></label>
           <button disabled={loading} className="flex items-center justify-center gap-2 rounded-xl bg-brand-600 py-3 font-bold text-white disabled:opacity-60 sm:col-span-2"><Save size={18} />{loading ? "Guardando..." : "Guardar cambios"}</button>
           {!isAdmin && <button type="button" onClick={deactivate} className="flex items-center justify-center gap-2 rounded-xl border border-red-200 py-3 font-bold text-red-600 sm:col-span-2"><Trash2 size={18} />Desactivar cuenta</button>}
+        </form>
+      </div>
+
+      <div className="mt-6 rounded-3xl border bg-white p-8 shadow-sm">
+        <div className="flex items-center gap-3">
+          <KeyRound size={28} className="text-brand-600" />
+          <div>
+            <h2 className="text-2xl font-black">Cambiar contrasena</h2>
+            <p className="text-sm text-slate-500">Actualiza tu clave de acceso.</p>
+          </div>
+        </div>
+
+        <form onSubmit={updatePassword} className="mt-6 grid gap-5">
+          <label className="text-sm font-semibold">
+            Contrasena actual
+            <input
+              type="password"
+              className="field mt-1"
+              value={passwordForm.currentPassword}
+              onChange={(event) => setPasswordForm({ ...passwordForm, currentPassword: event.target.value })}
+            />
+          </label>
+          <label className="text-sm font-semibold">
+            Nueva contrasena
+            <input
+              type="password"
+              className="field mt-1"
+              value={passwordForm.newPassword}
+              onChange={(event) => setPasswordForm({ ...passwordForm, newPassword: event.target.value })}
+            />
+          </label>
+          <label className="text-sm font-semibold">
+            Confirmar nueva contrasena
+            <input
+              type="password"
+              className="field mt-1"
+              value={passwordForm.confirmPassword}
+              onChange={(event) => setPasswordForm({ ...passwordForm, confirmPassword: event.target.value })}
+            />
+          </label>
+          <button disabled={passwordLoading} className="flex items-center justify-center gap-2 rounded-xl bg-brand-600 py-3 font-bold text-white disabled:opacity-60">
+            <KeyRound size={18} />
+            {passwordLoading ? "Actualizando..." : "Actualizar contrasena"}
+          </button>
         </form>
       </div>
     </main>

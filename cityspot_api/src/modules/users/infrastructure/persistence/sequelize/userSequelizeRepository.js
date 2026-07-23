@@ -40,6 +40,17 @@ class UserSequelizeRepository extends UserRepository {
     return this.toEntity(user);
   }
 
+  async updatePassword(id, password) {
+    const user = await UserModel.findByPk(id);
+
+    if (!user) {
+      return null;
+    }
+
+    await user.update({ password });
+    return this.toEntity(user);
+  }
+
   toEntity(userModel) {
     if (!userModel) {
       return null;

@@ -9,6 +9,7 @@ router.post("/register", asyncHandler(userController.register));
 router.post("/login", asyncHandler(userController.login));
 router.get("/profile", authenticate, asyncHandler(userController.getProfile));
 router.patch("/profile", authenticate, asyncHandler(userController.updateProfile));
+router.patch("/password", authenticate, asyncHandler(userController.updatePassword));
 router.delete("/profile", authenticate, asyncHandler(userController.deactivateProfile));
 
 module.exports = router;

@@ -18,6 +18,10 @@ class UserRepository {
   async updateStatus() {
     throw new Error("Method updateStatus is not implemented");
   }
+
+  async updatePassword() {
+    throw new Error("Method updatePassword is not implemented");
+  }
 }
 
 module.exports = UserRepository;
