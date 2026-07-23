@@ -935,6 +935,219 @@
       ]
     },
     {
+      "name": "Inquiries",
+      "item": [
+        {
+          "name": "Create Activity Inquiry",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"Se permiten mascotas en esta actividad?\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/activities/{{inquiryActivityId}}/inquiries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "activities",
+                "{{inquiryActivityId}}",
+                "inquiries"
+              ]
+            },
+            "description": "Permite que un usuario turista envie una consulta al propietario de una actividad activa."
+          },
+          "response": []
+        },
+        {
+          "name": "List My Inquiries",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inquiries/mine",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inquiries",
+                "mine"
+              ]
+            },
+            "description": "Lista las consultas enviadas por el usuario autenticado."
+          },
+          "response": []
+        },
+        {
+          "name": "Count My Unread Inquiry Responses",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inquiries/mine/unread-count",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inquiries",
+                "mine",
+                "unread-count"
+              ]
+            },
+            "description": "Cuenta respuestas del propietario que el usuario todavia no ha leido."
+          },
+          "response": []
+        },
+        {
+          "name": "Mark My Inquiry Responses As Read",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inquiries/mine/read",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inquiries",
+                "mine",
+                "read"
+              ]
+            },
+            "description": "Marca como leidas las respuestas pendientes del usuario autenticado."
+          },
+          "response": []
+        },
+        {
+          "name": "List Owner Inquiries",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inquiries/owner",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inquiries",
+                "owner"
+              ]
+            },
+            "description": "Lista las consultas recibidas por el propietario autenticado."
+          },
+          "response": []
+        },
+        {
+          "name": "Count Owner Pending Inquiries",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inquiries/owner/pending-count",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inquiries",
+                "owner",
+                "pending-count"
+              ]
+            },
+            "description": "Cuenta las consultas pendientes que debe responder el propietario."
+          },
+          "response": []
+        },
+        {
+          "name": "Answer Inquiry",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"answer\": \"Si, se permiten mascotas pequeñas con correa.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inquiries/{{inquiryId}}/answer",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inquiries",
+                "{{inquiryId}}",
+                "answer"
+              ]
+            },
+            "description": "Permite que el propietario responda una consulta recibida sobre sus actividades."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "Recommendations",
       "item": [
         {
@@ -1063,6 +1276,16 @@
     },
     {
       "key": "searchHistoryId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "inquiryActivityId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "inquiryId",
       "value": "",
       "type": "string"
     }
