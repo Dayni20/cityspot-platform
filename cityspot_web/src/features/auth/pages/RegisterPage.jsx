@@ -36,8 +36,23 @@ function RegisterPage() {
     event.preventDefault();
     setError("");
 
-    if (form.password.length < 6) {
-      setError("La contraseña debe tener al menos 6 caracteres.");
+    if (!/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+$/.test(form.name.trim())) {
+      setError("El nombre solo puede contener letras y espacios.");
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(form.email.trim())) {
+      setError("El formato del correo no es válido.");
+      return;
+    }
+
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)\S{8,72}$/.test(form.password)) {
+      setError("La contraseña debe tener entre 8 y 72 caracteres, sin espacios, e incluir mayúscula, minúscula y número.");
+      return;
+    }
+
+    if (!/^\+?\d{7,15}$/.test(form.phone.trim())) {
+      setError("El teléfono debe contener entre 7 y 15 dígitos y puede iniciar con +.");
       return;
     }
 
@@ -192,7 +207,8 @@ function RegisterPage() {
                   name="password"
                   type={show ? "text" : "password"}
                   required
-                  minLength={6}
+                  minLength={8}
+                  maxLength={72}
                   disabled={loading}
                   value={form.password}
                   onChange={handleChange}
@@ -218,7 +234,8 @@ function RegisterPage() {
                 name="confirm"
                 type={show ? "text" : "password"}
                 required
-                minLength={6}
+                minLength={8}
+                maxLength={72}
                 disabled={loading}
                 value={form.confirm}
                 onChange={handleChange}

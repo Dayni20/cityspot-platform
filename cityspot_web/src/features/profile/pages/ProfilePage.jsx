@@ -49,6 +49,24 @@ function ProfilePage() {
     setError("");
     setMessage("");
 
+    if (!/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+$/.test(form.name.trim())) {
+      setError("El nombre solo puede contener letras y espacios.");
+      setLoading(false);
+      return;
+    }
+
+    if (!/^\+?\d{7,15}$/.test(form.phone.trim())) {
+      setError("El teléfono debe contener entre 7 y 15 dígitos y puede iniciar con +.");
+      setLoading(false);
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(form.email.trim())) {
+      setError("El formato del correo no es válido.");
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await profileService.update(form);
       const updatedUser = response.user ?? response;
@@ -68,10 +86,31 @@ function ProfilePage() {
     setError("");
     setMessage("");
 
+    if (!passwordForm.currentPassword || !passwordForm.newPassword || !passwordForm.confirmPassword) {
+      setError("Completa todos los campos de contraseña.");
+      setPasswordLoading(false);
+      return;
+    }
+
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)\S{8,72}$/.test(passwordForm.newPassword)) {
+      setError("La contraseña debe tener entre 8 y 72 caracteres, sin espacios, e incluir mayúscula, minúscula y número.");
+      setPasswordLoading(false);
+      return;
+    }
+
+    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      setError("La confirmación de la contraseña no coincide.");
+      setPasswordLoading(false);
+      return;
+    }
+
     try {
       await profileService.updatePassword(passwordForm);
-      setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
-      setMessage("Contrasena actualizada correctamente.");
+      clearSession();
+      navigate("/login", {
+        replace: true,
+        state: { message: "Contrasena actualizada correctamente. Inicia sesion nuevamente." }
+      });
     } catch (err) {
       setError(err.message);
     } finally {

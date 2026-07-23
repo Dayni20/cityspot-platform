@@ -1,8 +1,9 @@
-import { Compass, LayoutDashboard, LogOut, MapPinned, Menu, Tags, User, X } from "lucide-react";
+import { Compass, LayoutDashboard, MapPinned, Menu, Tags, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { logout } from "../../features/auth/services/authService";
 import { getCurrentUser } from "../../services/sessionStorage";
+import ProfileActionsMenu from "../ui/ProfileActionsMenu";
 
 const navItems = [
   { to: "/admin", label: "Panel", icon: LayoutDashboard, end: true },
@@ -12,13 +13,7 @@ const navItems = [
 
 function AdminLayout() {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
   const user = getCurrentUser();
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login", { replace: true });
-  };
 
   useEffect(() => {
     const clearAdminSessionOnHistoryNavigation = () => {
@@ -99,21 +94,7 @@ function AdminLayout() {
 
       <main className="min-w-0 flex-1 px-4 py-16 sm:px-6 lg:px-8 lg:py-8">
         <div className="mb-4 flex flex-col items-stretch gap-3 sm:flex-row sm:justify-end">
-          <Link
-            to="/profile"
-            className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100"
-          >
-            <User size={17} />
-            Mi perfil
-          </Link>
-          <button
-            type="button"
-            className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100"
-            onClick={handleLogout}
-          >
-            <LogOut size={17} />
-            Cerrar sesión
-          </button>
+          <ProfileActionsMenu />
         </div>
         <Outlet />
       </main>
