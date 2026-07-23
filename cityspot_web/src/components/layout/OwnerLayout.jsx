@@ -1,8 +1,8 @@
 import { Compass, LayoutDashboard, MapPinned, Menu, MessageCircleQuestion, PlusCircle, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
-import { clearSession, getCurrentUser } from "../../services/sessionStorage";
 import { inquiryService } from "../../features/inquiries/services/inquiryService";
+import { clearSession, getCurrentUser } from "../../services/sessionStorage";
 
 const links = [
   { to: "/owner", label: "Resumen", icon: LayoutDashboard, end: true },

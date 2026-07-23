@@ -1,7 +1,6 @@
-import { CheckCircle2, Clock3, LogOut, MapPinned, User } from "lucide-react";
+import { CheckCircle2, Clock3, MapPinned } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { clearSession } from "../../../services/sessionStorage";
+import ProfileActionsMenu from "../../../components/ui/ProfileActionsMenu";
 import { activityService } from "../../activities/services/activityService";
 
 function getList(response) {
@@ -13,12 +12,6 @@ function getList(response) {
 function OwnerDashboardPage() {
   const [activities, setActivities] = useState([]);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    clearSession();
-    navigate("/login", { replace: true });
-  };
 
   useEffect(() => {
     activityService.listMine()
@@ -38,23 +31,7 @@ function OwnerDashboardPage() {
         <div>
           <h1 className="text-3xl font-black">Resumen de publicaciones</h1>
         </div>
-        <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-start">
-          <Link
-            to="/profile"
-            className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100"
-          >
-            <User size={17} />
-            Mi perfil
-          </Link>
-          <button
-            onClick={handleLogout}
-            className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100"
-            type="button"
-          >
-            <LogOut size={17} />
-            Cerrar sesión
-          </button>
-        </div>
+        <ProfileActionsMenu />
       </div>
 
       {error && <p className="mt-6 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
@@ -62,7 +39,19 @@ function OwnerDashboardPage() {
       <div className="mt-8 grid gap-4 md:grid-cols-3">
         {cards.map((card) => {
           const Icon = card.icon;
-          return <article key={card.label} className="rounded-2xl border bg-white p-6 shadow-sm"><div className="flex items-center justify-between"><div><p className="text-sm text-slate-500">{card.label}</p><p className="mt-2 text-3xl font-black">{card.value}</p></div><span className="grid h-12 w-12 place-items-center rounded-xl bg-brand-50 text-brand-700"><Icon /></span></div></article>;
+          return (
+            <article key={card.label} className="rounded-2xl border bg-white p-6 shadow-sm">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-slate-500">{card.label}</p>
+                  <p className="mt-2 text-3xl font-black">{card.value}</p>
+                </div>
+                <span className="grid h-12 w-12 place-items-center rounded-xl bg-brand-50 text-brand-700">
+                  <Icon />
+                </span>
+              </div>
+            </article>
+          );
         })}
       </div>
 
@@ -73,7 +62,9 @@ function OwnerDashboardPage() {
             <div key={activity.id} className="flex items-center justify-between rounded-xl bg-slate-50 p-4">
               <div>
                 <p className="font-semibold">{activity.name}</p>
-                <p className="text-sm text-slate-500">{activity.city} · Categoria {activity.categoryId}</p>
+                <p className="text-sm text-slate-500">
+                  {activity.city} - Categoria {activity.categoryId}
+                </p>
               </div>
               <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-700">{activity.status}</span>
             </div>
